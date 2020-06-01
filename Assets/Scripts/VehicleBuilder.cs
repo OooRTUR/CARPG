@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VehicleBuilder : MonoBehaviour
 {
-    [SerializeField]
-    private BodyPart bodypart;
-    [SerializeField]
-    private HeadPart headpart;
+    private Dictionary<string, VehiclePart> parts = new Dictionary<string, VehiclePart>()
+    {
+        {"Body", new BodyPart() },
+        {"Head", new HeadPart() }
+    };
+
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        bodypart.Inst(this.transform);
-        headpart.Inst(this.transform);
-        headpart.OnParentPartChanged("Tank");
+        parts["Body"].SpecifyChild("Head", parts["Head"]);
+
+        parts["Head"].Set(Resources.Load<GameObject>("Prefabs/Head/Head"), this.transform);
+        parts["Body"].Set(Resources.Load<GameObject>("Prefabs/Body/Body.Muscle"), this.transform);        
         
     }
 
@@ -23,30 +28,59 @@ public class VehicleBuilder : MonoBehaviour
     {
         
     }
+
+
+    private string bodyTypeNameEntry;
+    private void OnGUI()
+    {
+        bodyTypeNameEntry = GUILayout.TextField(bodyTypeNameEntry);
+        if (GUILayout.Button("Apply Body"))
+        {
+            GameObject loadedPartPrefab = Resources.Load<GameObject>($"Prefabs/Body/Body.{bodyTypeNameEntry}");
+            if (loadedPartPrefab!=null) 
+            {
+                parts["Body"].Set(loadedPartPrefab, this.transform);
+            }
+        }
+    }
 }
 
 [System.Serializable]
 public class VehiclePart
 {
-    [SerializeField]
-    private GameObject prefab;
+    public GameObject Obj { get; protected set; }
 
-    public GameObject Obj { get; private set; }
+    protected Dictionary<string, VehiclePart> attachedChilds = new Dictionary<string, VehiclePart>();
 
-    public virtual void Inst(Transform parent)
+    public void SpecifyChild(string name, VehiclePart part)
     {
-        Obj = GameObject.Instantiate(prefab);
+        attachedChilds.Add(name, part);
+    }
+    public void SpecifyChilds(Dictionary<string, VehiclePart> childs)
+    {
+        attachedChilds = childs;
+    }
+    public virtual void Set(GameObject loadedRes, Transform parent)
+    {
+        if(Obj!=null)
+            GameObject.Destroy(Obj);
+        Obj = GameObject.Instantiate(loadedRes);
         Obj.transform.parent = parent;
+        Obj.transform.position = Vector3.zero;
     }
 }
 
 [System.Serializable]
 public class BodyPart : VehiclePart
 {
-    public override void Inst(Transform parent)
+    public override void Set(GameObject loadedRes,Transform parent)
     {
-        base.Inst(parent);
+        base.Set(loadedRes,parent);
         Obj.name = parent.gameObject.name + ".Body";
+
+
+        string code = loadedRes.name.Substring(loadedRes.name.IndexOf("Body.") + "Body.".Length);
+        ((HeadPart)attachedChilds["Head"]).OnParentPartChanged(code);
     }
 }
 
@@ -63,14 +97,30 @@ public class HeadPart : VehiclePart
         get { return new Dictionary<string, Vector3>(relativePositions); }
     }
 
-    public override void Inst(Transform parent)
+    private GunPart attachedGun;
+
+    public override void Set(GameObject loadedRes, Transform parent)
     {
-        base.Inst(parent);
+        base.Set(loadedRes, parent);
         Obj.name = parent.gameObject.name + ".Head";
     }
 
     public void OnParentPartChanged(string parentTypeName)
     {
-        Obj.transform.localPosition = relativePositions[parentTypeName];
+        if (relativePositions.ContainsKey(parentTypeName))
+        {
+            Obj.transform.localPosition = relativePositions[parentTypeName];
+        }
+        else
+            Debug.LogWarning($"There is no such key {parentTypeName}, possible keys: {string.Join(";", relativePositions.Select(x => x.Key))}");
+    }
+}
+
+[System.Serializable]
+public class GunPart : VehiclePart
+{
+    public override void Set(GameObject loadedRes, Transform parent)
+    {
+        base.Set(loadedRes, parent);
     }
 }
