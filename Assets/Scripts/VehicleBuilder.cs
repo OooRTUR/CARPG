@@ -3,23 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+[ExecuteInEditMode]
 public class VehicleBuilder : MonoBehaviour
 {
     private Dictionary<string, VehiclePart> parts = new Dictionary<string, VehiclePart>()
     {
         {"Body", new BodyPart() },
-        {"Head", new HeadPart() }
+        {"Head", new HeadPart() },
+        {"Gun", new GunPart() }
     };
 
+    [SerializeField]
+    private string bodyPartTypeName;
+    [SerializeField]
+    private string headPartTypeName;
+    [SerializeField]
+    private string gunPartTypeName;
     
 
     // Start is called before the first frame update
     void Start()
     {
         parts["Body"].SpecifyChild("Head", parts["Head"]);
+        parts["Head"].SpecifyChild("Gun", parts["Gun"]);
 
-        parts["Head"].Set(Resources.Load<GameObject>("Prefabs/Head/Head"), this.transform);
-        parts["Body"].Set(Resources.Load<GameObject>("Prefabs/Body/Body.Muscle"), this.transform);        
+
+        parts["Gun"].Set(Resources.Load<GameObject>($"Prefabs/Gun/Gun.{gunPartTypeName}"), this.transform);
+        parts["Head"].Set(Resources.Load<GameObject>($"Prefabs/Head/Head.{headPartTypeName}"), this.transform);
+        parts["Body"].Set(Resources.Load<GameObject>($"Prefabs/Body/Body.{bodyPartTypeName}"), this.transform);        
         
     }
 
@@ -52,6 +64,8 @@ public class VehiclePart
 
     protected Dictionary<string, VehiclePart> attachedChilds = new Dictionary<string, VehiclePart>();
 
+    protected Dictionary<string, Vector3> relativePositions = new Dictionary<string, Vector3>();
+
     public void SpecifyChild(string name, VehiclePart part)
     {
         attachedChilds.Add(name, part);
@@ -67,6 +81,16 @@ public class VehiclePart
         Obj = GameObject.Instantiate(loadedRes);
         Obj.transform.parent = parent;
         Obj.transform.position = Vector3.zero;
+    }
+
+    public virtual void OnParentPartChanged(string parentTypeName)
+    {
+        if (relativePositions.ContainsKey(parentTypeName))
+        {
+            Obj.transform.localPosition = relativePositions[parentTypeName];
+        }
+        else
+            Debug.LogWarning($"There is no such key {parentTypeName}, possible keys: {string.Join(";", relativePositions.Select(x => x.Key))}");
     }
 }
 
@@ -87,40 +111,40 @@ public class BodyPart : VehiclePart
 [System.Serializable]
 public class HeadPart : VehiclePart
 {
-    private static Dictionary<string, Vector3> relativePositions = new Dictionary<string, Vector3>()
+    public HeadPart()
     {
-        {"Muscle",new Vector3(0,0.5f,-1) },
-        {"Tank", new Vector3(0,0.5f,1.55f) }
-    };
-    public static Dictionary<string, Vector3> RelativePositions
-    {
-        get { return new Dictionary<string, Vector3>(relativePositions); }
+        relativePositions = new Dictionary<string, Vector3>()
+        {
+            {"Muscle",new Vector3(0,0.5f,-1) },
+            {"Tank", new Vector3(0,0.5f,1.55f) }
+        };
     }
-
-    private GunPart attachedGun;
 
     public override void Set(GameObject loadedRes, Transform parent)
     {
         base.Set(loadedRes, parent);
         Obj.name = parent.gameObject.name + ".Head";
-    }
 
-    public void OnParentPartChanged(string parentTypeName)
-    {
-        if (relativePositions.ContainsKey(parentTypeName))
-        {
-            Obj.transform.localPosition = relativePositions[parentTypeName];
-        }
-        else
-            Debug.LogWarning($"There is no such key {parentTypeName}, possible keys: {string.Join(";", relativePositions.Select(x => x.Key))}");
+        string loadedResTypeName = loadedRes.name.Substring(loadedRes.name.IndexOf("Head.") + "Head.".Length);
+        ((GunPart)attachedChilds["Gun"]).OnParentPartChanged(loadedResTypeName);
     }
 }
 
 [System.Serializable]
 public class GunPart : VehiclePart
 {
+    public GunPart()
+    {
+        relativePositions = new Dictionary<string, Vector3>()
+        {
+            {"Head", new Vector3(0,0,0.7f) }
+        };
+    }
     public override void Set(GameObject loadedRes, Transform parent)
     {
         base.Set(loadedRes, parent);
+        Obj.name = parent.gameObject.name + ".Gun";
+
+    
     }
 }
