@@ -4,93 +4,119 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using UnityEditor.VersionControl;
+using UnityEditor.UIElements;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class VehicleBuilderEditorWindow : EditorWindow
 {
+    static readonly string vehicleName = "VehicleEditor";
+    VehicleBuilderTempData data = null;
+    Type selectionInfo;
+    GameObject body;
+    GameObject head;
+    GameObject gun;
+
     [MenuItem("Tools/Vehicle Builder Window")]
     static void Init()
     {
         VehicleBuilderEditorWindow window = (VehicleBuilderEditorWindow)EditorWindow.GetWindow(typeof(VehicleBuilderEditorWindow));
-        window.Show();       
+        window.Show();
+        if (GameObject.Find(vehicleName) == null)
+        {
+
+        }
     }
 
-    Type selectionInfo;
-
-    public void OnSelectionChange()
+    private void OnSelectionChange()
     {
         selectionInfo = GetSelectionInfo(Selection.activeGameObject);
-        Debug.Log(selectionInfo);
     }
+    private void OnDestroy()
+    {
+        DestroyVehicle();
+    }
+    private void OnEnable()
+    {
+        InitTempData();
+        CreateVehicle();
+        
+    }
+    
 
-    string vehicleName = "New Vehicle";
-    string bodyTypeName = "Muscle";
-    string headTypeName = "Head";
-    string gunTypeName = "32mm";
     void OnGUI()
     {
-        vehicleName = GUILayout.TextField(vehicleName);
-        bodyTypeName = GUILayout.TextField(bodyTypeName);
-        headTypeName = GUILayout.TextField(headTypeName);
-        gunTypeName = GUILayout.TextField(gunTypeName);
+        GUILayout.Label("Body");
+        body = (GameObject)EditorGUILayout.ObjectField(body, typeof(GameObject), false);
+        GUILayout.Label("Head");
+        head = (GameObject)EditorGUILayout.ObjectField(head, typeof(GameObject), false);
+        GUILayout.Label("Gun");
+        gun = (GameObject)EditorGUILayout.ObjectField(gun, typeof(GameObject), false);
 
-
-        if (GetSelectionInfo(Selection.activeGameObject) == null)
+        if (Selection.activeObject != null)
         {
-            if (GUILayout.Button("Create Vehicle"))
+            if(selectionInfo.Name == "Body")
             {
-                GameObject newVehicleObj = new GameObject(vehicleName);
-                Vehicle vehicle = newVehicleObj.AddComponent<Vehicle>();
-                vehicle.SetBody(bodyTypeName);
-                vehicle.SetHead(headTypeName);
-                vehicle.SetGun(gunTypeName);
-                Selection.activeGameObject = newVehicleObj;
-
-                Debug.Log(vehicle.GetBody().name);
-                Debug.Log(vehicle.GetHead().name);
-                Debug.Log(vehicle.GetGun().name);
-
-                CreateTempData();
-            }
-        }
-        else
-        {
-            if(GUILayout.Button("Change part"))
-            {
-
+                OnBodySelected();
             }
         }
     }
 
-    private void CreateTempData()
+    private void OnBodySelected()
     {
+        
+    }
+
+
+    private void CreateVehicle()
+    {
+        if (GameObject.Find(vehicleName) != null) return;
+
+        GameObject newVehicleObj = new GameObject(vehicleName);
+        VehicleBuilder vehicle = newVehicleObj.AddComponent<VehicleBuilder>();
+        vehicle.SetBody(body);
+        vehicle.SetHead(head);
+        vehicle.SetGun(gun);
+        Selection.activeGameObject = newVehicleObj;
+    }
+    private void DestroyVehicle()
+    {
+        DestroyImmediate(GameObject.Find(vehicleName));
+    }
+
+    private void InitTempData()
+    {
+        if (!AssetDatabase.IsValidFolder("Assets/VehicleBuilderTempData"))
+            AssetDatabase.CreateFolder("Assets", "VehicleBuilderTempData");
+
         string[] res = AssetDatabase.FindAssets(vehicleName, new[] { "Assets/VehicleBuilderTempData" });
+        
 
         if (res.Length < 1)
         {
-            VehicleBuilderTempData data = ScriptableObject.CreateInstance<VehicleBuilderTempData>();
-            data.bodyTypeName = bodyTypeName;
-            data.headTypeName = headTypeName;
-            data.gunTypeName = gunTypeName;
-            if (!AssetDatabase.IsValidFolder("Assets/VehicleBuilderTempData"))
-                AssetDatabase.CreateFolder("Assets", "VehicleBuilderTempData");
+            data = ScriptableObject.CreateInstance<VehicleBuilderTempData>();
             AssetDatabase.CreateAsset(data, $"Assets/VehicleBuilderTempData/{vehicleName}.asset");
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
         else
         {
-            throw new System.Exception("There is asset with such name: " + vehicleName);
+             data = (VehicleBuilderTempData)AssetDatabase.LoadAssetAtPath($"Assets/VehicleBuilderTempData/{vehicleName}.asset", typeof(VehicleBuilderTempData));
         }
-    }
+
+        body = data.body;
+        head = data.head;
+        gun = data.gun;
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }    
 
     private Type GetSelectionInfo(GameObject selection)
     {
         if (selection == null) return null;
 
-        if (selection.GetComponent<Vehicle>() != null) return typeof(Vehicle);
+        if (selection.GetComponent<VehicleBuilder>() != null) return typeof(VehicleBuilder);
 
         if (selection.transform.parent != null &&
-            selection.transform.parent.GetComponent<Vehicle>() != null)
+            selection.transform.parent.GetComponent<VehicleBuilder>() != null)
         {
             //This is tempory solution
             if (selection.GetComponent<Body>() != null) return typeof(Body);
@@ -102,9 +128,27 @@ public class VehicleBuilderEditorWindow : EditorWindow
     }
 }
 
+
 public class VehicleBuilderTempData : ScriptableObject
 {
-    public string bodyTypeName;
-    public string headTypeName;
-    public string gunTypeName;
+    public GameObject body;
+    public GameObject head;
+    public GameObject gun;
+
+
+    private void OnEnable()
+    {
+        if(body == null)
+        {
+            body = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Resources/Prefabs/Body/Body.Tank.prefab", typeof(GameObject));
+        }
+        if (head == null)
+        {
+            head = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Resources/Prefabs/Head/Head.Head.prefab", typeof(GameObject));
+        }
+        if (gun == null)
+        {
+            gun = (GameObject)AssetDatabase.LoadAssetAtPath($"Assets/Resources/Prefabs/Gun/Gun.32mm.prefab", typeof(GameObject));
+        }
+    }
 }

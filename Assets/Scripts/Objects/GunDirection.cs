@@ -7,10 +7,10 @@ public class GunDirection : MonoBehaviour
     public GunDirectionData data;
     private void Start()
     {
-        if(data == null)
-        {
-            data = new GunDirectionData();
-        }
+        //if(data == null)
+        //{
+        //    data = new GunDirectionData();
+        //}
     }
 
     private void OnDrawGizmosSelected()

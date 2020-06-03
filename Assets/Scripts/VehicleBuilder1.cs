@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 [ExecuteInEditMode]
-public class VehicleBuilder : MonoBehaviour
+public class VehicleBuilder1 : MonoBehaviour
 {
     private Dictionary<string, VehiclePart> parts = new Dictionary<string, VehiclePart>()
     {
@@ -15,11 +15,11 @@ public class VehicleBuilder : MonoBehaviour
     };
 
     [SerializeField]
-    private string bodyPartTypeName;
+    private string bodyPartTypeName = null;
     [SerializeField]
-    private string headPartTypeName;
+    private string headPartTypeName = null;
     [SerializeField]
-    private string gunPartTypeName;
+    private string gunPartTypeName = null;
     
 
     // Start is called before the first frame update

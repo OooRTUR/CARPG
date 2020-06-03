@@ -121,6 +121,20 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &325691540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headPoint: {x: 0, y: 0, z: 0}
+  firePoint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,20 +417,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainSpeed: 25
---- !u!114 &1181420309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  headPoint: {x: 0, y: 0, z: 0}
-  firePoint: {x: 0, y: 0, z: 0}
 --- !u!1 &1545505244
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb7094690d1d784eaa524a92aa7b8ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 1181420309}
+  data: {fileID: 325691540}
 --- !u!1001 &8527735861243305207
 PrefabInstance:
   m_ObjectHideFlags: 0
