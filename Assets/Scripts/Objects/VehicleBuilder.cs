@@ -36,15 +36,12 @@ public class VehicleBuilder : MonoBehaviour
     public void SetHead(GameObject partPrefab)
     {
         Transform existPart = GetHead();
-        if (existPart == null)
-        {
-            InstantiatePart(partPrefab, "Head");
-        }
-        else
-        {
+        if (existPart != null)
+        { 
             DestroyImmediate(existPart.gameObject);
-            InstantiatePart(partPrefab, "Head");
         }
+        GameObject res = InstantiatePart(partPrefab, "Head");
+        res.AddComponent<HeadBuilder>();
     }
     public Transform GetHead()
     {

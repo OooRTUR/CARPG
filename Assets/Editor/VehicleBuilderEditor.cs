@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Linq;
-using UnityEditor.VersionControl;
-using UnityEditor.UIElements;
-using UnityEngine.Experimental.GlobalIllumination;
 using System.IO;
 
 public class VehicleBuilderEditorWindow : EditorWindow
@@ -18,9 +15,11 @@ public class VehicleBuilderEditorWindow : EditorWindow
     GameObject head;
     GameObject gun;
 
-    private VehicleBuilderEditorWindow.PartSelectionGUI bodySelection;
-    private VehicleBuilderEditorWindow.PartSelectionGUI headSelection;
-    private VehicleBuilderEditorWindow.PartSelectionGUI gunSelection;
+    private PartSelectionGUI bodySelection;
+    private PartSelectionGUI headSelection;
+    private PartSelectionGUI gunSelection;
+    private ToolSelectionGUI toolSelection;
+
 
     [MenuItem("Tools/Vehicle Builder Window")]
     static void Init()
@@ -48,6 +47,7 @@ public class VehicleBuilderEditorWindow : EditorWindow
         bodySelection = new PartSelectionGUI(data.BodyPaths);
         headSelection = new PartSelectionGUI(data.HeadPaths);
         gunSelection = new PartSelectionGUI(data.GunPaths);
+        toolSelection = new ToolSelectionGUI();
 
         CreateVehicle();
         
@@ -66,20 +66,19 @@ public class VehicleBuilderEditorWindow : EditorWindow
         if (Selection.activeObject != null)
         {
             bodySelection.OnGUI();
-            if (GUILayout.Button("Apply"))
-            {
-                builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject)));
-            }
+            GUIExtensions.Button("Apply", 
+                delegate { builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject))); });
+
             headSelection.OnGUI();
-            if (GUILayout.Button("Apply"))
-            {
-                builder.SetHead((GameObject)AssetDatabase.LoadAssetAtPath(headSelection.GetSelectedPath(), typeof(GameObject)));
-            }
+            GUIExtensions.Button("Aply",
+                delegate { builder.SetHead((GameObject)AssetDatabase.LoadAssetAtPath(headSelection.GetSelectedPath(), typeof(GameObject))); });
+
             gunSelection.OnGUI();
-            if (GUILayout.Button("Apply"))
-            {
-                builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject)));
-            }
+            GUIExtensions.Button("Apply",
+                delegate { builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject))); });
+
+            toolSelection.OnGUI(builder);
+
 
             if (selectionInfo.Name == "Body")
             {
@@ -162,48 +161,74 @@ public class VehicleBuilderEditorWindow : EditorWindow
         return null;        
     }
 
-    public class PartSelectionGUI
-    {
-        int selected = 0;
-        string[] options;
-        string[] paths;
-
-        int Selected
-        {
-            get { return selected; }
-            set 
-            { 
-                selected = value;
-                OnSelectedChanged();
-            }
-        }
-        private void OnSelectedChanged()
-        {
-            
-            //Debug.Log($"{options[selected]} {paths[selected]}");
-        }
-
-        public string GetSelectedPath()
-        {
-            return paths[selected];
-        }
-
-        public PartSelectionGUI(IEnumerable<string> paths)
-        {
-            this.paths = paths.ToArray();
-            options = paths.Select(x => Path.GetFileName(x)).ToArray();
-        }
-
-        public void OnGUI()
-        {
-            Selected = EditorGUILayout.Popup(Selected, options);
-        }
-    }
-
-
-
+    
 }
 
+public class PartSelectionGUI
+{
+    int selected = 0;
+    string[] options;
+    string[] paths;
+
+    int Selected
+    {
+        get { return selected; }
+        set
+        {
+            selected = value;
+            OnSelectedChanged();
+        }
+    }
+    private void OnSelectedChanged()
+    {
+
+        //Debug.Log($"{options[selected]} {paths[selected]}");
+    }
+
+    public string GetSelectedPath()
+    {
+        return paths[selected];
+    }
+
+    public PartSelectionGUI(IEnumerable<string> paths)
+    {
+        this.paths = paths.ToArray();
+        options = paths.Select(x => Path.GetFileName(x)).ToArray();
+    }
+
+    public void OnGUI()
+    {
+        Selected = EditorGUILayout.Popup(Selected, options);
+    }
+}
+public class ToolSelectionGUI
+{
+    public int Selected { get; private set; }
+    string[] options = new string[] { "None", "Head" };
+    public void OnGUI(VehicleBuilder builder)
+    {
+        Selected = EditorGUILayout.Popup(Selected, options);
+        if(Selected == 0)
+        {
+            Selection.activeGameObject = builder.gameObject;
+        }
+        else if (Selected == 1)
+        {
+            Selection.activeGameObject = builder.GetHead().gameObject;
+        }
+    }
+}
+
+public class GUIExtensions
+{
+    public static void Button(string label, Action action)
+    {
+        if (GUILayout.Button(label))
+        {
+            action.Invoke();
+        }
+    }
+}
 
 public class VehicleBuilderTempData : ScriptableObject
 {
