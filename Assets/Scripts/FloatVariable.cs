@@ -10,10 +10,13 @@ public class FloatVariable : ScriptableObject, ISerializationCallbackReceiver
 	[NonSerialized]
 	public float RuntimeValue;
 
-	public void OnAfterDeserialize()
-	{
-		RuntimeValue = InitialValue;
-	}
+    public void OnAfterDeserialize()
+    {
+        RuntimeValue = InitialValue;
+    }
 
-	public void OnBeforeSerialize() { }
+    public void OnBeforeSerialize()
+    {
+
+    }
 }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: VehicleEditor
   m_EditorClassIdentifier: Assembly-CSharp-Editor::VehicleBuilderTempData
-  body: {fileID: 289217643886819135, guid: dc4c1fea16202e046ac35a277114542a, type: 3}
-  head: {fileID: 7285865935493784443, guid: 69303d1f72b2975489949dc93e37354f, type: 3}
+  body: {fileID: 3628224920141902437, guid: 500f5c10623e1c54bbdff3b9a1db9f2b, type: 3}
+  head: {fileID: 285861942859928718, guid: d3490977e9031094baf8f1e667a68a18, type: 3}
   gun: {fileID: 4323763698010563637, guid: 75546e79700118743bbc1d3d3fc977c3, type: 3}

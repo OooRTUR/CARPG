@@ -12,6 +12,7 @@ public class VehicleBuilder : MonoBehaviour
         return newPart;
     }
 
+    #region Body Set/Get
     public void SetBody(GameObject partPrefab)
     {
         Transform existPart = GetBody();
@@ -29,8 +30,9 @@ public class VehicleBuilder : MonoBehaviour
     {
         return transform.Find("Body");
     }
+    #endregion
 
-
+    #region Head Set/Get
     public void SetHead(GameObject partPrefab)
     {
         Transform existPart = GetHead();
@@ -48,8 +50,9 @@ public class VehicleBuilder : MonoBehaviour
     {
         return transform.Find("Head");
     }
+    #endregion
 
-
+    #region Gun Set/Get
     public void SetGun(GameObject partPrefab)
     {
         Transform existPart = GetGun();
@@ -67,4 +70,5 @@ public class VehicleBuilder : MonoBehaviour
     {
         return transform.Find("Gun");
     }
+    #endregion
 }
