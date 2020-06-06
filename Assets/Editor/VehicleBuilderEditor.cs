@@ -11,9 +11,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
     static readonly string vehicleName = "VehicleEditor";
     VehicleBuilderTempData data = null;
     Type selectionInfo;
-    GameObject body;
-    GameObject head;
-    GameObject gun;
 
     private PartSelectionGUI bodySelection;
     private PartSelectionGUI headSelection;
@@ -45,38 +42,42 @@ public class VehicleBuilderEditorWindow : EditorWindow
     {
         InitTempData();
         bodySelection = new PartSelectionGUI(data.BodyPaths);
+        bodySelection.SelectedChanged += BodySelection_SelectedChanged;
+
         headSelection = new PartSelectionGUI(data.HeadPaths);
+        headSelection.SelectedChanged += HeadSelection_SelectedChanged;
+
         gunSelection = new PartSelectionGUI(data.GunPaths);
+        gunSelection.SelectedChanged += GunSelection_SelectedChanged;
+
         toolSelection = new ToolSelectionGUI();
 
         CreateVehicle();
         
     }
-    
+
+    private void GunSelection_SelectedChanged(object sender, EventArgs e)
+    {
+        builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject)));
+    }
+
+    private void HeadSelection_SelectedChanged(object sender, EventArgs e)
+    {
+        builder.SetHead((GameObject)AssetDatabase.LoadAssetAtPath(headSelection.GetSelectedPath(), typeof(GameObject)));
+    }
+
+    private void BodySelection_SelectedChanged(object sender, EventArgs e)
+    {
+        builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject)));
+    }
 
     void OnGUI()
     {
-        GUILayout.Label("Body");
-        body = (GameObject)EditorGUILayout.ObjectField(body, typeof(GameObject), false);
-        GUILayout.Label("Head");
-        head = (GameObject)EditorGUILayout.ObjectField(head, typeof(GameObject), false);
-        GUILayout.Label("Gun");
-        gun = (GameObject)EditorGUILayout.ObjectField(gun, typeof(GameObject), false);
-
         if (Selection.activeObject != null)
         {
             bodySelection.OnGUI();
-            GUIExtensions.Button("Apply", 
-                delegate { builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject))); });
-
             headSelection.OnGUI();
-            GUIExtensions.Button("Aply",
-                delegate { builder.SetHead((GameObject)AssetDatabase.LoadAssetAtPath(headSelection.GetSelectedPath(), typeof(GameObject))); });
-
             gunSelection.OnGUI();
-            GUIExtensions.Button("Apply",
-                delegate { builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject))); });
-
             toolSelection.OnGUI(builder);
 
 
@@ -103,9 +104,9 @@ public class VehicleBuilderEditorWindow : EditorWindow
 
         GameObject newVehicleObj = new GameObject(vehicleName);
         builder = newVehicleObj.AddComponent<VehicleBuilder>();
-        builder.SetBody(body);
-        builder.SetHead(head);
-        builder.SetGun(gun);
+        BodySelection_SelectedChanged(null, null);
+        HeadSelection_SelectedChanged(null, null);
+        GunSelection_SelectedChanged(null, null);
         Selection.activeGameObject = newVehicleObj;
     }
     private void DestroyVehicle()
@@ -130,11 +131,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
         {
              data = (VehicleBuilderTempData)AssetDatabase.LoadAssetAtPath($"Assets/VehicleBuilderTempData/{vehicleName}.asset", typeof(VehicleBuilderTempData));
         }
-
-        body = data.body;
-        head = data.head;
-        gun = data.gun;
-
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }    
@@ -170,19 +166,26 @@ public class PartSelectionGUI
     string[] options;
     string[] paths;
 
+    public event EventHandler SelectedChanged;
+    
+
     int Selected
     {
         get { return selected; }
         set
         {
-            selected = value;
-            OnSelectedChanged();
+            if (selected != value)
+            {
+                selected = value;
+                OnSelectedChanged();
+            }
         }
     }
+    public string SelectedPath { get; private set; }
     private void OnSelectedChanged()
     {
-
-        //Debug.Log($"{options[selected]} {paths[selected]}");
+        SelectedPath = paths[Selected];
+        SelectedChanged?.Invoke(this, new EventArgs());
     }
 
     public string GetSelectedPath()
@@ -227,13 +230,6 @@ public class ToolSelectionGUI
 
 public class VehicleBuilderTempData : ScriptableObject
 {
-    public GameObject body;
-    public GameObject head;
-    public GameObject gun;
-
-
-    
-
     public static string[] GetPartGuids(string partTypeName)
     {
         return AssetDatabase.FindAssets($"{partTypeName}.", new[] { $"{Paths.prefabsPath}/{partTypeName}" });
@@ -262,23 +258,40 @@ public class VehicleBuilderTempData : ScriptableObject
         get { return gunPaths; }
     }
 
+    private Dictionary<string, string> curretPaths;
+
+    public string GetPath(string partTypeName)
+    {
+        return curretPaths[partTypeName];
+    }
+    public void SetPath(string partTypeName, string path)
+    {
+        curretPaths[partTypeName] = path;
+    }
+
     private void OnEnable()
     {
+        curretPaths = new Dictionary<string, string>() {
+            {"Body","" },
+            {"Head","" },
+            {"Gun","" }
+        };
+
         bodyPaths = GetPartPaths("Body");
         headPaths = GetPartPaths("Head");
         gunPaths = GetPartPaths("Gun");        
 
-        if (body == null)
+        if (String.IsNullOrEmpty(curretPaths["Body"]))
         {
-            body = (GameObject)AssetDatabase.LoadAssetAtPath(bodyPaths.First(), typeof(GameObject));
+            curretPaths["Body"] = bodyPaths.First();
         }
-        if (head == null)
+        if (String.IsNullOrEmpty(curretPaths["Head"]))
         {
-            head = (GameObject)AssetDatabase.LoadAssetAtPath(headPaths.First(), typeof(GameObject));
+            curretPaths["Head"] = headPaths.First();
         }
-        if (gun == null)
+        if (String.IsNullOrEmpty(curretPaths["Gun"]))
         {
-            gun = (GameObject)AssetDatabase.LoadAssetAtPath(gunPaths.First(), typeof(GameObject));
+            curretPaths["Gun"] = gunPaths.First();
         }
     }
 }
