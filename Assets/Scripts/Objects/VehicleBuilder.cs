@@ -16,15 +16,11 @@ public class VehicleBuilder : MonoBehaviour
     public void SetBody(GameObject partPrefab)
     {
         Transform existPart = GetBody();
-        if (existPart == null)
-        {
-            InstantiatePart(partPrefab, "Body");
-        }
-        else
+        if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
-            InstantiatePart(partPrefab, "Body");
         }
+        InstantiatePart(partPrefab, "Body");
     }
     public Transform GetBody()
     {
@@ -53,15 +49,13 @@ public class VehicleBuilder : MonoBehaviour
     public void SetGun(GameObject partPrefab)
     {
         Transform existPart = GetGun();
-        if (existPart == null)
-        {
-            InstantiatePart(partPrefab, "Gun");
-        }
-        else
+        if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
-            InstantiatePart(partPrefab, "Gun");
         }
+        GameObject res = InstantiatePart(partPrefab, "Gun");
+        res.AddComponent<GunBuilder>();
+
     }
     public Transform GetGun()
     {

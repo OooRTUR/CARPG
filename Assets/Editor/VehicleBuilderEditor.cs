@@ -193,7 +193,7 @@ public class PartSelectionGUI
     public PartSelectionGUI(IEnumerable<string> paths)
     {
         this.paths = paths.ToArray();
-        options = paths.Select(x => Path.GetFileName(x)).ToArray();
+        options = paths.Select(path => Path.GetFileName(path)).ToArray();
     }
 
     public void OnGUI()
@@ -204,7 +204,7 @@ public class PartSelectionGUI
 public class ToolSelectionGUI
 {
     public int Selected { get; private set; }
-    string[] options = new string[] { "None", "Head" };
+    string[] options = new string[] { "None", "Head", "Gun" };
     public void OnGUI(VehicleBuilder builder)
     {
         Selected = EditorGUILayout.Popup(Selected, options);
@@ -216,19 +216,14 @@ public class ToolSelectionGUI
         {
             Selection.activeGameObject = builder.GetHead().gameObject;
         }
-    }
-}
-
-public class GUIExtensions
-{
-    public static void Button(string label, Action action)
-    {
-        if (GUILayout.Button(label))
+        else if (Selected == 2)
         {
-            action.Invoke();
+            Selection.activeGameObject = builder.GetGun().gameObject;
         }
     }
 }
+
+
 
 public class VehicleBuilderTempData : ScriptableObject
 {
@@ -237,11 +232,11 @@ public class VehicleBuilderTempData : ScriptableObject
     public GameObject gun;
 
 
-    private static string prefabsPath = "Assets/Resources/Prefabs";
+    
 
     public static string[] GetPartGuids(string partTypeName)
     {
-        return AssetDatabase.FindAssets($"{partTypeName}.", new[] { $"{prefabsPath}/{partTypeName}" });
+        return AssetDatabase.FindAssets($"{partTypeName}.", new[] { $"{Paths.prefabsPath}/{partTypeName}" });
     }
     public static IEnumerable<string> GetPartPaths(string partTypeName)
     {
