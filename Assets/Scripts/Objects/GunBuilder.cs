@@ -1,28 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [ExecuteInEditMode]
 public class GunBuilder : MonoBehaviour
 {
+    public enum Mode { MoveCenter, MoveSurf, SetDirectionPoints }
+    public Mode _Mode;
+    public GunData gunData;
+
     public Transform GetSurf()
     {
         return transform.Find("Surf");
     }
 
-    private Vector3 _newSurfPosition = Vector3.zero;
-    public Vector3 NewSurfPosition
+    public void OnEnable()
     {
-        get { return _newSurfPosition; }
-        set { _newSurfPosition = value; }
+        gunData = (GunData)ScriptableObject.CreateInstance(typeof(GunData));
+        gunData.SurfPositionChanged += GunData_SurfPositionChanged;
     }
 
-    public virtual void ApplySurfPosition()
+    private void GunData_SurfPositionChanged(object sender, EventArgs e)
     {
-        GetSurf().position = _newSurfPosition;
+        GetSurf().position = ((GunData)sender).SurfPosition;
     }
-
-    public Vector3 JoinPosition { get; set; }
-    public Vector3 FirePosition { get; set; }
 
     private void OnDrawGizmosSelected()
     {
@@ -30,11 +31,42 @@ public class GunBuilder : MonoBehaviour
         {
             Gizmos.DrawIcon(transform.position, "sphere.png", false);
         }
-        Gizmos.DrawIcon(FirePosition, "fire.png", false);
-        Gizmos.DrawIcon(JoinPosition, "join.png", false);
+        Gizmos.DrawIcon(gunData.FirePoint, "fire.png", false);
+        Gizmos.DrawIcon(gunData.JoinPoint, "join.png", false);
     }
-    public enum Mode { MoveCenter, MoveSurf, SetDirectionPoints}
-    public Mode _Mode;
+
+}
+
+public class GunData : ScriptableObject
+{
+    public event EventHandler SurfPositionChanged;
+
+    private Vector3 joinPoint;
+    private Vector3 firePoint;
+    private Vector3 surfPosition;  
+    
+    public Vector3 JoinPoint
+    {
+        get { return joinPoint; }
+        set { joinPoint = value; }
+    }
+    public Vector3 FirePoint
+    {
+        get { return firePoint; }
+        set { firePoint = value; }
+    }
+    public Vector3 SurfPosition
+    {
+        get { return surfPosition; }
+        set 
+        { 
+            surfPosition = value;
+            SurfPositionChanged?.Invoke(this, new EventArgs());
+        }
+    }
+
+
+
 }
 
 
