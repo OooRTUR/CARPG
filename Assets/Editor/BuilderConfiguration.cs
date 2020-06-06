@@ -6,11 +6,13 @@ using System.Linq;
 
 public class BuilderConfiguration : ScriptableObject
 {
+    private string editName = "VehicleEditor";
     private string homeFolderName = "VehicleBuilder";
     private string bodyDefinition = "Body";
     private string headDefinition = "Head";
     private string gunDefinition = "Gun";
 
+    public string EditName { get { return editName; } }
     public string HomeFolderName { get { return homeFolderName; } }
     public string HomeFolderPath { get { return $"Assets\\{homeFolderName}"; } }
     public string PrefabsFolderPath { get { return $"{HomeFolderPath}\\Prefabs"; } }

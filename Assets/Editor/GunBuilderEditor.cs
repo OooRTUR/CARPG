@@ -97,14 +97,14 @@ public class GunBuilderEditor : Editor
 
     private void OnSelection_MoveSurf()
     {
-        GunBuilder gunBuilder = (GunBuilder)target;
+        var gunBuilder = (GunBuilder)target;
         Tools.current = Tool.Custom;
         GUIExtensions.PositionHandle(gunBuilder.gunData,typeof(GunData), "SurfPosition");
     }
 
     private void OnSelection_MoveDirectionPoints()
     {
-        GunBuilder gunBuilder = (GunBuilder)target;
+        var gunBuilder = (GunBuilder)target;
         Tools.current = Tool.Custom;
 
         if (dirPointSelection.Selected == 0)
@@ -123,6 +123,9 @@ public class GunBuilderEditor : Editor
 
     private void OnApplyButtonPressed()
     {
+
+        var editoWindow = VehicleBuilderEditorWindow.Instance;
+        
         /*
          * SAVE DATA
          * pos = getSurfPos()

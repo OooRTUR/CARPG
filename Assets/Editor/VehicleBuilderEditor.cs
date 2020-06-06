@@ -14,9 +14,9 @@ public class VehicleBuilderEditorWindow : EditorWindow
         get { return GetWindow<VehicleBuilderEditorWindow>(); }
     }
 
-    static readonly string vehicleName = "VehicleEditor";
-    Type selectionInfo;
     GameObject selectedObject;
+
+    BuilderConfiguration config;
 
     public GameObject SelectedObject
     {
@@ -49,10 +49,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
         window.Show();
     }
 
-    private void OnSelectionChange()
-    {
-        selectionInfo = GetSelectionInfo(Selection.activeGameObject);
-    }
     private void OnDestroy()
     {
         DestroyVehicle();
@@ -60,8 +56,9 @@ public class VehicleBuilderEditorWindow : EditorWindow
     }
     private void OnEnable()
     {
+        config = ScriptableObject.CreateInstance<BuilderConfiguration>();
         //InitTempData();
-        BuilderConfiguration config =  CreateFolderStructure();
+        CreateFolderStructure();
         bodySelection = new PartSelectionGUI(config.GetPartPaths("Body"));
         bodySelection.SelectedChanged += BodySelection_SelectedChanged;
 
@@ -111,9 +108,9 @@ public class VehicleBuilderEditorWindow : EditorWindow
     VehicleBuilder builder;
     private void CreateVehicle()
     {
-        if (GameObject.Find(vehicleName) != null) return;
+        if (GameObject.Find(config.EditName) != null) return;
 
-        GameObject newVehicleObj = new GameObject(vehicleName);
+        GameObject newVehicleObj = new GameObject(config.EditName);
         builder = newVehicleObj.AddComponent<VehicleBuilder>();
         BodySelection_SelectedChanged(null, null);
         HeadSelection_SelectedChanged(null, null);
@@ -121,13 +118,11 @@ public class VehicleBuilderEditorWindow : EditorWindow
     }
     private void DestroyVehicle()
     {
-        DestroyImmediate(GameObject.Find(vehicleName));
+        DestroyImmediate(GameObject.Find(config.EditName));
     }
     
-    private BuilderConfiguration CreateFolderStructure()
+    private void CreateFolderStructure()
     {
-        var config = ScriptableObject.CreateInstance<BuilderConfiguration>();
-
         if (!AssetDatabase.IsValidFolder(config.HomeFolderPath))
             AssetDatabase.CreateFolder("Assets", config.HomeFolderName);
 
@@ -149,25 +144,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
             if (customFolderAttribute.CreateModelsFolderRequired && !AssetDatabase.IsValidFolder(customFolderPath))
                 AssetDatabase.CreateFolder(customFolderPath,"Models");
         }
-        return config;
-    }
-
-    private Type GetSelectionInfo(GameObject selection)
-    {
-        if (selection == null) return null;
-
-        if (selection.GetComponent<VehicleBuilder>() != null) return typeof(VehicleBuilder);
-
-        if (selection.transform.parent != null &&
-            selection.transform.parent.GetComponent<VehicleBuilder>() != null)
-        {
-            //This is tempory solution
-            if (selection.GetComponent<Body>() != null) return typeof(Body);
-            else if (selection.GetComponent<Head>() != null) return typeof(Head);
-            else if (selection.GetComponent<Gun>() != null) return typeof(Gun);
-        }
-
-        return null;        
     }
 }
 
@@ -202,6 +178,7 @@ public class SelectionE
         this.options = options.ToArray();
     }
 }
+
 public class PartSelectionGUI : SelectionE
 {
     string[] paths;
@@ -215,6 +192,7 @@ public class PartSelectionGUI : SelectionE
         return paths[selected];
     }  
 }
+
 public class ToolSelectionGUI
 {
     public int Selected { get; private set; }
