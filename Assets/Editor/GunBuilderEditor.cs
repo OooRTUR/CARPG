@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Net.NetworkInformation;
 using System.Linq;
 using System.IO;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(GunBuilder))]
 public class GunBuilderEditor : Editor
@@ -37,6 +38,114 @@ public class GunBuilderEditor : Editor
         Selection.activeGameObject = gun;
     }
 
-    
+    protected virtual void OnSceneGUI()
+    {
+        GunBuilder gunBuilder = Selection.activeGameObject.GetComponent<GunBuilder>();
+        if (toolSelection.Selected == 0)
+        {
+            gunBuilder._Mode = GunBuilder.Mode.MoveCenter;
+            OnSelection_MoveCenter();
+        }
+        if(toolSelection.Selected == 1)
+        {
+            gunBuilder._Mode = GunBuilder.Mode.MoveSurf;
+            OnSelection_MoveSurf();
+        }
+        if(toolSelection.Selected == 2)
+        {
+            gunBuilder._Mode = GunBuilder.Mode.SetDirectionPoints;
+            OnSelection_MoveDirectionPoints();
+        }
+        
+    }
+    private void OnSelection_MoveCenter()
+    {
+        Tools.current = Tool.Move;
+    }
+
+    private void OnSelection_MoveSurf()
+    {
+
+
+        GunBuilder gunBuilder = (GunBuilder)target;
+        Tools.current = Tool.Custom;
+
+        EditorGUI.BeginChangeCheck();
+        Vector3 handlePosition = Handles.PositionHandle(gunBuilder.GetSurf().position, Quaternion.identity);
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(gunBuilder, "Change Look At Target Position");
+            gunBuilder.NewSurfPosition = handlePosition;
+            gunBuilder.ApplySurfPosition();
+        }
+    }
+
+    private void OnSelection_MoveDirectionPoints()
+    {
+        GunBuilder gunBuilder = (GunBuilder)target;
+        Tools.current = Tool.Custom;
+
+        if (dirPointSelection.Selected == 0)
+        {
+            EditorGUI.BeginChangeCheck();
+            Vector3 handlePosition = Handles.PositionHandle(gunBuilder.FirePosition, Quaternion.identity);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(gunBuilder, "Change Fire Position");
+                gunBuilder.FirePosition = handlePosition;
+            }
+        }
+        else if (dirPointSelection.Selected == 1)
+        {
+            EditorGUI.BeginChangeCheck();
+            Vector3 handlePosition = Handles.PositionHandle(gunBuilder.JoinPosition, Quaternion.identity);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(gunBuilder, "Change Join Position");
+                gunBuilder.JoinPosition = handlePosition;
+            }
+        }
+
+
+
+
+    }
+
+    SelectionE toolSelection;
+    SelectionE dirPointSelection;
+    private void OnEnable()
+    {
+        toolSelection = new SelectionE(new string[]{
+            "Move Center",
+            "Move Surf",
+            "Move Direction Points"
+        });
+        dirPointSelection = new SelectionE(new string[]
+        {
+            "Fire Point",
+            "Join Point"
+        });
+    }
+
+    public override void OnInspectorGUI()
+    {
+        toolSelection.OnGUI();
+        GUIExtensions.Button("Apply Changes", OnApplyChanges);
+        if(toolSelection.Selected == 2)
+        {
+            dirPointSelection.OnGUI();
+        }
+    }
+
+    private void OnApplyChanges()
+    {
+        /*
+         * pos = getSurfPos()
+         * headAssetName = GetHeadAssetName()
+         * gunAssetName = GetGunAssetName()
+         * newAsset =  CreateAsset in headAsset.Folder
+         *  where newAsset.name = headAssetName_PositionData.asset
+         */
+    }
 }
 

@@ -8,9 +8,33 @@ using System.IO;
 
 public class VehicleBuilderEditorWindow : EditorWindow
 {
+    public static VehicleBuilderEditorWindow Instance
+    {
+        get { return GetWindow<VehicleBuilderEditorWindow>(); }
+    }
+
     static readonly string vehicleName = "VehicleEditor";
     VehicleBuilderTempData data = null;
     Type selectionInfo;
+    GameObject selectedObject;
+
+    public GameObject SelectedObject
+    {
+        get { return selectedObject; }
+        set
+        {
+            if (selectedObject != value)
+            {
+                selectedObject = value;
+                OnSelectedObjectChanged();
+            }
+        }
+    }
+
+    private void OnSelectedObjectChanged()
+    {
+
+    }
 
     private PartSelectionGUI bodySelection;
     private PartSelectionGUI headSelection;
@@ -23,10 +47,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
     {
         VehicleBuilderEditorWindow window = (VehicleBuilderEditorWindow)EditorWindow.GetWindow(typeof(VehicleBuilderEditorWindow));
         window.Show();
-        if (GameObject.Find(vehicleName) == null)
-        {
-
-        }
     }
 
     private void OnSelectionChange()
@@ -36,65 +56,55 @@ public class VehicleBuilderEditorWindow : EditorWindow
     private void OnDestroy()
     {
         DestroyVehicle();
-        DeleteTempData();
+        //DeleteTempData();
     }
     private void OnEnable()
     {
-        InitTempData();
-        bodySelection = new PartSelectionGUI(data.BodyPaths);
+        //InitTempData();
+        bodySelection = new PartSelectionGUI(Paths.GetPartPaths("Body"));
         bodySelection.SelectedChanged += BodySelection_SelectedChanged;
 
-        headSelection = new PartSelectionGUI(data.HeadPaths);
+        headSelection = new PartSelectionGUI(Paths.GetPartPaths("Head"));
         headSelection.SelectedChanged += HeadSelection_SelectedChanged;
 
-        gunSelection = new PartSelectionGUI(data.GunPaths);
+        gunSelection = new PartSelectionGUI(Paths.GetPartPaths("Gun"));
         gunSelection.SelectedChanged += GunSelection_SelectedChanged;
 
-        toolSelection = new ToolSelectionGUI();
+        //toolSelection = new ToolSelectionGUI();
 
         CreateVehicle();
+
+        Selection.activeObject = builder.gameObject;
         
     }
-
-    private void GunSelection_SelectedChanged(object sender, EventArgs e)
+    private void BodySelection_SelectedChanged(object sender, EventArgs e)
     {
-        builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject)));
+        builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject)));
+        Selection.activeGameObject = builder.GetBody().gameObject;
     }
 
     private void HeadSelection_SelectedChanged(object sender, EventArgs e)
     {
         builder.SetHead((GameObject)AssetDatabase.LoadAssetAtPath(headSelection.GetSelectedPath(), typeof(GameObject)));
+        Selection.activeGameObject = builder.GetHead().gameObject;
     }
 
-    private void BodySelection_SelectedChanged(object sender, EventArgs e)
+    private void GunSelection_SelectedChanged(object sender, EventArgs e)
     {
-        builder.SetBody((GameObject)AssetDatabase.LoadAssetAtPath(bodySelection.GetSelectedPath(), typeof(GameObject)));
+        builder.SetGun((GameObject)AssetDatabase.LoadAssetAtPath(gunSelection.GetSelectedPath(), typeof(GameObject)));
+        Selection.activeGameObject = builder.GetGun().gameObject;
     }
 
     void OnGUI()
     {
-        if (Selection.activeObject != null)
-        {
-            bodySelection.OnGUI();
-            headSelection.OnGUI();
-            gunSelection.OnGUI();
-            toolSelection.OnGUI(builder);
+        SelectedObject = Selection.activeGameObject;
 
+        if (SelectedObject == null) return;
 
-            if (selectionInfo.Name == "Body")
-            {
-                OnBodySelected();
-            }
-        }
-        else
-        {
-
-        }
-    }
-
-    private void OnBodySelected()
-    {
-        
+        bodySelection.OnGUI();
+        headSelection.OnGUI();
+        gunSelection.OnGUI();
+        //toolSelection.OnGUI(builder);
     }
 
     VehicleBuilder builder;
@@ -107,7 +117,6 @@ public class VehicleBuilderEditorWindow : EditorWindow
         BodySelection_SelectedChanged(null, null);
         HeadSelection_SelectedChanged(null, null);
         GunSelection_SelectedChanged(null, null);
-        Selection.activeGameObject = newVehicleObj;
     }
     private void DestroyVehicle()
     {
@@ -156,23 +165,17 @@ public class VehicleBuilderEditorWindow : EditorWindow
 
         return null;        
     }
-
-    
 }
 
-public class PartSelectionGUI
+public class SelectionE
 {
-    int selected = 0;
-    string[] options;
-    string[] paths;
-
+    protected int selected = 0;
+    protected string[] options;
     public event EventHandler SelectedChanged;
-    
-
-    int Selected
+    public int Selected
     {
         get { return selected; }
-        set
+        private set
         {
             if (selected != value)
             {
@@ -181,28 +184,32 @@ public class PartSelectionGUI
             }
         }
     }
-    public string SelectedPath { get; private set; }
-    private void OnSelectedChanged()
+    protected void OnSelectedChanged()
     {
-        SelectedPath = paths[Selected];
         SelectedChanged?.Invoke(this, new EventArgs());
     }
-
-    public string GetSelectedPath()
+    public virtual void OnGUI()
     {
-        return paths[selected];
+        Selected = EditorGUILayout.Popup(Selected, options);
     }
 
-    public PartSelectionGUI(IEnumerable<string> paths)
+    public SelectionE(IEnumerable<string> options)
+    {
+        this.options = options.ToArray();
+    }
+}
+public class PartSelectionGUI : SelectionE
+{
+    string[] paths;
+    public PartSelectionGUI(IEnumerable<string> paths) : base(paths)
     {
         this.paths = paths.ToArray();
         options = paths.Select(path => Path.GetFileName(path)).ToArray();
     }
-
-    public void OnGUI()
+    public string GetSelectedPath()
     {
-        Selected = EditorGUILayout.Popup(Selected, options);
-    }
+        return paths[selected];
+    }  
 }
 public class ToolSelectionGUI
 {

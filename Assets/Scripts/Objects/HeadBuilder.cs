@@ -12,7 +12,7 @@ public class HeadBuilder : MonoBehaviour
         set { _position = value; }
     }
 
-    public virtual void Change()
+    public void ApplyPosition()
     {
         transform.position = _position;
         GetGun().position = _position;
