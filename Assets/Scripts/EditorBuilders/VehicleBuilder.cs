@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [ExecuteInEditMode]
 public class VehicleBuilder : MonoBehaviour
@@ -13,14 +14,14 @@ public class VehicleBuilder : MonoBehaviour
     }
 
     #region Body Set/Get
-    public void SetBody(GameObject partPrefab)
+    public void SetBody(Tuple<GameObject, UnityEngine.Object> partData)
     {
         Transform existPart = GetBody();
         if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
         }
-        InstantiatePart(partPrefab, "Body");
+        InstantiatePart(partData.Item1, "Body");
     }
     public Transform GetBody()
     {
@@ -29,14 +30,14 @@ public class VehicleBuilder : MonoBehaviour
     #endregion
 
     #region Head Set/Get
-    public void SetHead(GameObject partPrefab)
+    public void SetHead(Tuple<GameObject, UnityEngine.Object> partData)
     {
         Transform existPart = GetHead();
         if (existPart != null)
         { 
             DestroyImmediate(existPart.gameObject);
         }
-        GameObject res = InstantiatePart(partPrefab, "Head");
+        GameObject res = InstantiatePart(partData.Item1, "Head");
         res.AddComponent<HeadBuilder>();
     }
     public Transform GetHead()
@@ -46,14 +47,14 @@ public class VehicleBuilder : MonoBehaviour
     #endregion
 
     #region Gun Set/Get
-    public void SetGun(GameObject partPrefab)
+    public void SetGun(Tuple<GameObject, UnityEngine.Object> partData)
     {
         Transform existPart = GetGun();
         if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
         }
-        GameObject res = InstantiatePart(partPrefab, "Gun");
+        GameObject res = InstantiatePart(partData.Item1, "Gun");
         res.AddComponent<GunBuilder>();
 
     }

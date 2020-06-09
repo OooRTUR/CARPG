@@ -2,6 +2,8 @@
 using System;
 using System.Reflection;
 using UnityEditor;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GUIExtensions
 {
@@ -25,4 +27,36 @@ public class GUIExtensions
         }
     }
 
+}
+
+public class SelectionE
+{
+    protected int selected = 0;
+    protected string[] options;
+    public event EventHandler SelectedChanged;
+    public int Selected
+    {
+        get { return selected; }
+        private set
+        {
+            if (selected != value)
+            {
+                selected = value;
+                OnSelectedChanged();
+            }
+        }
+    }
+    protected void OnSelectedChanged()
+    {
+        SelectedChanged?.Invoke(this, new EventArgs());
+    }
+    public virtual void OnGUI()
+    {
+        Selected = EditorGUILayout.Popup(Selected, options);
+    }
+
+    public SelectionE(IEnumerable<string> options)
+    {
+        this.options = options.ToArray();
+    }
 }

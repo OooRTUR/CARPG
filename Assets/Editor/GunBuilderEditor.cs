@@ -124,7 +124,6 @@ public class GunBuilderEditor : Editor
     private void OnApplyButtonPressed()
     {
 
-        var editoWindow = VehicleBuilderEditorWindow.Instance;
         
         /*
          * SAVE DATA

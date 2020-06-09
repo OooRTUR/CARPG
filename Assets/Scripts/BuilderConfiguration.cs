@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 public class BuilderConfiguration : ScriptableObject
 {
@@ -13,9 +14,7 @@ public class BuilderConfiguration : ScriptableObject
     private string gunDefinition = "Gun";
 
     public string EditName { get { return editName; } }
-    public string HomeFolderName { get { return homeFolderName; } }
-    public string HomeFolderPath { get { return $"Assets\\{homeFolderName}"; } }
-    public string PrefabsFolderPath { get { return $"{HomeFolderPath}\\Prefabs"; } }
+    public string PrefabsFolderPath { get { return $"Assets\\Prefabs"; } }
 
     [CustomFolder]
     public string Body { get { return bodyDefinition; } }
@@ -30,11 +29,28 @@ public class BuilderConfiguration : ScriptableObject
     {
         return AssetDatabase.FindAssets($"{partTypeName}.", new[] { $"{PrefabsFolderPath}\\{partTypeName}" });
     }
+
     public IEnumerable<string> GetPartPaths(string partTypeName)
     {
         List<string> res = new List<string>();
         string[] guids = GetPartGuids(partTypeName);
-        return guids.Select(x => AssetDatabase.GUIDToAssetPath(x));
+        return guids.Select(guid => AssetDatabase.GUIDToAssetPath(guid));
+    }
+
+    public Tuple<GameObject, UnityEngine.Object> GetAsset(string path)
+    {
+        //TODO: return Tuple<GameObject, Asset
+        //Asset contain additionaldata
+        string prefabName = Path.GetFileNameWithoutExtension(path);
+        string directoryName = Path.GetDirectoryName(path);
+        AssetDatabase.FindAssets(prefabName, new string[] { directoryName });
+        return Tuple.Create((GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)), new UnityEngine.Object());
+    }
+
+    public IEnumerable<GameObject> LoadAssets(string partTypeName)
+    {
+        return GetPartPaths(partTypeName)
+            .Select(path => (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)));
     }
 
     /*
