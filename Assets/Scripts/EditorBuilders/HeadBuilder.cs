@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using System;
 
 [ExecuteInEditMode]
 public class HeadBuilder : MonoBehaviour
@@ -9,21 +12,20 @@ public class HeadBuilder : MonoBehaviour
     public Vector3 Position
     {
         get { return _position; }
-        set { _position = value; }
+        set 
+        {
+            Vector3 substract = value - _position;
+            _position += substract;
+            Parts.GetGun().GetComponent<GunBuilder>().UpdatePosition(substract);
+            transform.position = _position;
+        }
     }
 
-    public void ApplyPosition()
+    public BuilderParts Parts { private set; get; }
+
+    private void OnEnable()
     {
-        transform.position = _position;
-        GetGun().position = _position;
+        Parts = new BuilderParts(transform.parent);
     }
 
-    public Head HeadComponent()
-    {
-        return transform.GetComponent<Head>();
-    }
-    public Transform GetGun()
-    {
-        return transform.parent.Find("Gun");
-    }
 }

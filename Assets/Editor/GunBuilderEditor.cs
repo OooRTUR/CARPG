@@ -14,6 +14,11 @@ public class GunBuilderEditor : Editor
     SelectionE toolSelection;
     SelectionE dirPointSelection;
 
+    GunBuilder builder;
+
+    /// <summary>
+    /// Create gun object with empty parent
+    /// </summary>
     [MenuItem("Tools/Create Centered Gun From Gun Models Folder")]
     static void CreateCenteredGun()
     {
@@ -35,9 +40,9 @@ public class GunBuilderEditor : Editor
 
         string gunModelName =  Path.GetFileNameWithoutExtension(path);
 
-        GameObject gun = new GameObject(gunModelName);
-        GameObject gunModelAsset =  (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-        GameObject gunSurf =  GameObject.Instantiate(gunModelAsset,gun.transform);
+        var gun = new GameObject(gunModelName);
+        var gunModelAsset =  (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
+        var gunSurf =  GameObject.Instantiate(gunModelAsset,gun.transform);
         gunSurf.name = "Surf";
         gun.AddComponent<Gun>();
         Undo.RegisterCreatedObjectUndo(gun, "Gun Object Created");
@@ -47,6 +52,7 @@ public class GunBuilderEditor : Editor
 
     private void OnEnable()
     {
+        builder = Selection.activeGameObject.GetComponent<GunBuilder>();
         toolSelection = new SelectionE(new string[]{
             "Move Center",
             "Move Surf",
@@ -61,21 +67,20 @@ public class GunBuilderEditor : Editor
 
     protected virtual void OnSceneGUI()
     {
-        GunBuilder gunBuilder = Selection.activeGameObject.GetComponent<GunBuilder>();
         if (toolSelection.Selected == 0)
         {
-            gunBuilder._Mode = GunBuilder.Mode.MoveCenter;
-            OnSelection_MoveCenter();
+            builder._Mode = GunBuilder.Mode.MoveCenter;
+            OnToolSelection_MoveCenter();
         }
         if(toolSelection.Selected == 1)
         {
-            gunBuilder._Mode = GunBuilder.Mode.MoveSurf;
-            OnSelection_MoveSurf();
+            builder._Mode = GunBuilder.Mode.MoveSurf;
+            OnToolSelection_MoveSurf();
         }
         if(toolSelection.Selected == 2)
         {
-            gunBuilder._Mode = GunBuilder.Mode.SetDirectionPoints;
-            OnSelection_MoveDirectionPoints();
+            builder._Mode = GunBuilder.Mode.SetDirectionPoints;
+            OnToolSelection_MoveDirectionPoints();
         }
         
     }
@@ -90,19 +95,20 @@ public class GunBuilderEditor : Editor
         GUIExtensions.Button("Apply Changes", OnApplyButtonPressed);
     }
 
-    private void OnSelection_MoveCenter()
+    #region OnToolSelection 
+    private void OnToolSelection_MoveCenter()
+    {
+        Tools.current = Tool.Custom;
+        GUIExtensions.PositionHandle(builder.gunData, typeof(GunData), "CenterPosition");
+    }
+
+    private void OnToolSelection_MoveSurf()
     {
         Tools.current = Tool.Move;
+        
     }
 
-    private void OnSelection_MoveSurf()
-    {
-        var gunBuilder = (GunBuilder)target;
-        Tools.current = Tool.Custom;
-        GUIExtensions.PositionHandle(gunBuilder.gunData,typeof(GunData), "SurfPosition");
-    }
-
-    private void OnSelection_MoveDirectionPoints()
+    private void OnToolSelection_MoveDirectionPoints()
     {
         var gunBuilder = (GunBuilder)target;
         Tools.current = Tool.Custom;
@@ -120,10 +126,11 @@ public class GunBuilderEditor : Editor
 
 
     }
+    #endregion
 
     private void OnApplyButtonPressed()
     {
-
+        //builder.gunData.
         
         /*
          * SAVE DATA

@@ -76,19 +76,19 @@ public class VehicleBuilderEditorWindow : EditorWindow
     private void BodySelection_SelectedChanged(object sender, EventArgs e)
     {
         builder.SetBody(config.GetAsset(bodySelection.GetSelectedPath()));
-        Selection.activeGameObject = builder.GetBody().gameObject;
+        Selection.activeGameObject = builder.Parts.GetBody().gameObject;
     }
 
     private void HeadSelection_SelectedChanged(object sender, EventArgs e)
     {
         builder.SetHead(config.GetAsset(headSelection.GetSelectedPath()));
-        Selection.activeGameObject = builder.GetHead().gameObject;
+        Selection.activeGameObject = builder.Parts.GetHead().gameObject;
     }
 
     private void GunSelection_SelectedChanged(object sender, EventArgs e)
     {
         builder.SetGun(config.GetAsset(gunSelection.GetSelectedPath()));
-        Selection.activeGameObject = builder.GetGun().gameObject;
+        Selection.activeGameObject = builder.Parts.GetGun().gameObject;
     }
 
     

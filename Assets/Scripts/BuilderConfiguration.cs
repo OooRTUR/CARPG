@@ -8,7 +8,6 @@ using System.IO;
 public class BuilderConfiguration : ScriptableObject
 {
     private string editName = "VehicleEditor";
-    private string homeFolderName = "VehicleBuilder";
     private string bodyDefinition = "Body";
     private string headDefinition = "Head";
     private string gunDefinition = "Gun";

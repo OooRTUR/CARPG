@@ -8,22 +8,24 @@ public class GunBuilder : MonoBehaviour
     public enum Mode { MoveCenter, MoveSurf, SetDirectionPoints }
     public Mode _Mode;
     public GunData gunData;
-
-    public Transform GetSurf()
+    public BuilderParts Parts { get; private set;}
+    public void UpdatePosition(Vector3 subtract)
     {
-        return transform.Find("Surf");
+        gunData.CenterPosition += subtract;
+        gunData.SurfPosition += subtract;
+        gunData.JoinPoint += subtract;
+        gunData.FirePoint += subtract;
     }
+
 
     public void OnEnable()
     {
+        Parts = new BuilderParts(transform.parent);
+
         gunData = (GunData)ScriptableObject.CreateInstance(typeof(GunData));
         gunData.SurfPositionChanged += GunData_SurfPositionChanged;
     }
 
-    private void GunData_SurfPositionChanged(object sender, EventArgs e)
-    {
-        GetSurf().position = ((GunData)sender).SurfPosition;
-    }
 
     private void OnDrawGizmosSelected()
     {
@@ -33,8 +35,36 @@ public class GunBuilder : MonoBehaviour
         }
         Gizmos.DrawIcon(gunData.FirePoint, "fire.png", false);
         Gizmos.DrawIcon(gunData.JoinPoint, "join.png", false);
+        Gizmos.DrawIcon(gunData.CenterPosition, "center.png", false);
     }
 
+    private void GunData_SurfPositionChanged(object sender, EventArgs e)
+    {
+        transform.position = ((GunData)sender).SurfPosition;
+    }
+}
+
+public class BuilderParts
+{
+    private Transform transform;
+    public BuilderParts(Transform transform)
+    {
+        this.transform = transform;
+    }
+    public Transform GetBody()
+    {
+        return transform.Find("Body");
+    }
+
+    public Transform GetGun()
+    {
+        return transform.Find("Gun");
+    }
+
+    public Transform GetHead()
+    {
+        return transform.Find("Head");
+    }
 }
 
 public class GunData : ScriptableObject
@@ -43,7 +73,8 @@ public class GunData : ScriptableObject
 
     private Vector3 joinPoint;
     private Vector3 firePoint;
-    private Vector3 surfPosition;  
+    private Vector3 surfPosition;
+    private Vector3 centerPosition;
     
     public Vector3 JoinPoint
     {
@@ -63,6 +94,11 @@ public class GunData : ScriptableObject
             surfPosition = value;
             SurfPositionChanged?.Invoke(this, new EventArgs());
         }
+    }
+    public Vector3 CenterPosition
+    {
+        get { return centerPosition; }
+        set { centerPosition = value; }
     }
 
 
