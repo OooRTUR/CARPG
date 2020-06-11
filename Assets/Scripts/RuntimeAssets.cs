@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using BuilderConfiguration = VehicleBuilder.BuilderConfiguration;
 
-public class RuntimeAssets: SingletonObject<RuntimeAssets>
+public class RuntimeAssets : SingletonObject<RuntimeAssets>
 {
     public List<GameObject> bodyParts;
     public List<GameObject> headParts;
@@ -12,7 +13,7 @@ public class RuntimeAssets: SingletonObject<RuntimeAssets>
     private new void Awake()
     {
         base.Awake();
-        BuilderConfiguration config = ScriptableObject.CreateInstance<BuilderConfiguration>();
+        var config = ScriptableObject.CreateInstance<BuilderConfiguration>();
 
         bodyParts = config.LoadAssets("Body").ToList();
         headParts = config.LoadAssets("Head").ToList();
@@ -24,4 +25,3 @@ public class RuntimeAssets: SingletonObject<RuntimeAssets>
         throw new System.Exception($"There is another instance of RuntimeAssets attached to {gameObject.name}");
     }
 }
-
