@@ -26,7 +26,7 @@ public class BuilderConfiguration : ScriptableObject
 
     public string[] GetPartGuids(string partTypeName)
     {
-        return AssetDatabase.FindAssets($"{partTypeName}.", new[] { $"{PrefabsFolderPath}\\{partTypeName}" });
+        return AssetDatabase.FindAssets($"{partTypeName}. t:prefab", new[] { $"{PrefabsFolderPath}\\{partTypeName}" });
     }
 
     public IEnumerable<string> GetPartPaths(string partTypeName)
@@ -34,16 +34,6 @@ public class BuilderConfiguration : ScriptableObject
         List<string> res = new List<string>();
         string[] guids = GetPartGuids(partTypeName);
         return guids.Select(guid => AssetDatabase.GUIDToAssetPath(guid));
-    }
-
-    public Tuple<GameObject, UnityEngine.Object> GetAsset(string path)
-    {
-        //TODO: return Tuple<GameObject, Asset
-        //Asset contain additionaldata
-        string prefabName = Path.GetFileNameWithoutExtension(path);
-        string directoryName = Path.GetDirectoryName(path);
-        AssetDatabase.FindAssets(prefabName, new string[] { directoryName });
-        return Tuple.Create((GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)), new UnityEngine.Object());
     }
 
     public IEnumerable<GameObject> LoadAssets(string partTypeName)
@@ -77,5 +67,22 @@ public class CustomFolderAttribute : Attribute
     {
         get { return createModelsFolderRequired; }
         set { createModelsFolderRequired = true; }
+    }
+}
+
+public class PartContext
+{
+    public UnityEngine.Object Prefab { get; private set; }
+    public UnityEngine.Object Data { get; private set; }
+    
+    public PartContext(string path, Type partDataType)
+    {
+        Prefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
+        string assetDataPath = Path.ChangeExtension(path, ".asset");
+        Data = AssetDatabase.LoadAssetAtPath(assetDataPath, partDataType);
+        if(Data == null)
+        {
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance(partDataType.Name), assetDataPath);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEditor;
 
 [ExecuteInEditMode]
 public class VehicleBuilder : MonoBehaviour
@@ -19,36 +20,36 @@ public class VehicleBuilder : MonoBehaviour
         return newPart;
     }
 
-    public void SetBody(Tuple<GameObject, UnityEngine.Object> partData)
+    public void SetBody(PartContext partContext)
     {
         Transform existPart = Parts.GetBody();
         if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
         }
-        InstantiatePart(partData.Item1, "Body");
+        InstantiatePart((GameObject)partContext.Prefab, "Body");
     }
 
-    public void SetHead(Tuple<GameObject, UnityEngine.Object> partData)
+    public void SetHead(PartContext partContext)
     {
         Transform existPart = Parts.GetHead();
         if (existPart != null)
         { 
             DestroyImmediate(existPart.gameObject);
         }
-        GameObject res = InstantiatePart(partData.Item1, "Head");
+        GameObject res = InstantiatePart((GameObject)partContext.Prefab, "Head");
         res.AddComponent<HeadBuilder>();
     }
 
-    public void SetGun(Tuple<GameObject, UnityEngine.Object> partData)
+    public void SetGun(PartContext partContext)
     {
         Transform existPart = Parts.GetGun();
         if (existPart != null)
         {
             DestroyImmediate(existPart.gameObject);
         }
-        GameObject res = InstantiatePart(partData.Item1, "Gun");
-        res.AddComponent<GunBuilder>();
-
+        GameObject res = InstantiatePart((GameObject)partContext.Prefab, "Gun");
+        var gunBuilder =  res.AddComponent<GunBuilder>();
+        gunBuilder.GunData = (GunBuildData)partContext.Data;
     }
 }

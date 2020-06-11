@@ -14,9 +14,9 @@ public class HeadBuilder : MonoBehaviour
         get { return _position; }
         set 
         {
-            Vector3 substract = value - _position;
-            _position += substract;
-            Parts.GetGun().GetComponent<GunBuilder>().UpdatePosition(substract);
+            Vector3 subtract = value - _position;
+            _position += subtract;
+            Parts.GetGun().GetComponent<GunBuilder>().UpdatePosition(subtract);
             transform.position = _position;
         }
     }

@@ -99,13 +99,15 @@ public class GunBuilderEditor : Editor
     private void OnToolSelection_MoveCenter()
     {
         Tools.current = Tool.Custom;
-        GUIExtensions.PositionHandle(builder.gunData, typeof(GunData), "CenterPosition");
+        GUIExtensions.PositionHandle(builder.GunData, typeof(GunBuildData), "CenterPosition");
     }
 
     private void OnToolSelection_MoveSurf()
     {
-        Tools.current = Tool.Move;
-        
+        var gunBuilder = (GunBuilder)target;
+        Tools.current = Tool.Custom;
+
+        GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "SurfPosition");
     }
 
     private void OnToolSelection_MoveDirectionPoints()
@@ -115,11 +117,11 @@ public class GunBuilderEditor : Editor
 
         if (dirPointSelection.Selected == 0)
         {
-            GUIExtensions.PositionHandle(gunBuilder.gunData, typeof(GunData), "FirePoint");
+            GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "FirePoint");
         }
         else if (dirPointSelection.Selected == 1)
         {
-            GUIExtensions.PositionHandle(gunBuilder.gunData, typeof(GunData), "JoinPoint");
+            GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "JoinPoint");
         }
 
 
@@ -131,7 +133,7 @@ public class GunBuilderEditor : Editor
     private void OnApplyButtonPressed()
     {
         //builder.gunData.
-        
+
         /*
          * SAVE DATA
          * pos = getSurfPos()
@@ -140,6 +142,7 @@ public class GunBuilderEditor : Editor
          * newAsset =  CreateAsset in headAsset.Folder
          *  where newAsset.name = headAssetName_PositionData.asset
          */
+        AssetDatabase.Refresh();
     }
 
     //private void InitTempData()

@@ -17,8 +17,3 @@ public class Body : MonoBehaviour
     }
 }
 
-public class BodyPartData : ScriptableObject
-{
-    public Vector3 headJoin;
-
-}
