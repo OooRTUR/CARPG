@@ -57,9 +57,9 @@ namespace VehicleBuilder
         {
             builder = Selection.activeGameObject.GetComponent<GunBuilder>();
             toolSelection = new SelectionE(new string[]{
-            "Move Center",
+            "Move Direction Points",
             "Move Surf",
-            "Move Direction Points"
+            "Move Center",
         });
             dirPointSelection = new SelectionE(new string[]
             {
@@ -70,10 +70,11 @@ namespace VehicleBuilder
 
         protected virtual void OnSceneGUI()
         {
+
             if (toolSelection.Selected == 0)
             {
-                builder._Mode = GunBuilder.Mode.MoveCenter;
-                OnToolSelection_MoveCenter();
+                builder._Mode = GunBuilder.Mode.SetDirectionPoints;
+                OnToolSelection_MoveDirectionPoints();
             }
             if (toolSelection.Selected == 1)
             {
@@ -82,9 +83,9 @@ namespace VehicleBuilder
             }
             if (toolSelection.Selected == 2)
             {
-                builder._Mode = GunBuilder.Mode.SetDirectionPoints;
-                OnToolSelection_MoveDirectionPoints();
+                builder._Mode = GunBuilder.Mode.MoveCenter;
             }
+
 
         }
 
@@ -99,18 +100,12 @@ namespace VehicleBuilder
         }
 
         #region OnToolSelection 
-        private void OnToolSelection_MoveCenter()
-        {
-            Tools.current = Tool.Custom;
-            GUIExtensions.PositionHandle(builder.GunData, typeof(GunBuildData), "CenterPosition");
-        }
-
         private void OnToolSelection_MoveSurf()
         {
             var gunBuilder = (GunBuilder)target;
             Tools.current = Tool.Custom;
 
-            GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "SurfPosition");
+            GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "PositionHandle");
         }
 
         private void OnToolSelection_MoveDirectionPoints()
@@ -120,11 +115,11 @@ namespace VehicleBuilder
 
             if (dirPointSelection.Selected == 0)
             {
-                GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "FirePoint");
+                GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "FirePointHandle");
             }
             else if (dirPointSelection.Selected == 1)
             {
-                GUIExtensions.PositionHandle(gunBuilder.GunData, typeof(GunBuildData), "JoinPoint");
+                GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "JoinPointHandle");
             }
 
 

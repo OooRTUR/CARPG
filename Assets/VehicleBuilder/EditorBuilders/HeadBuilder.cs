@@ -16,9 +16,7 @@ namespace VehicleBuilder
             get { return _position; }
             set
             {
-                Vector3 subtract = value - _position;
-                _position += subtract;
-                Parts.GetGun().GetComponent<GunBuilder>().UpdatePosition(subtract);
+                Parts.GetGun().GetComponent<GunBuilder>().UpdatePosition(transform.position, value);
                 transform.position = _position;
             }
         }

@@ -84,7 +84,8 @@ namespace VehicleBuilder
             Data = AssetDatabase.LoadAssetAtPath(assetDataPath, partDataType);
             if (Data == null)
             {
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance(partDataType.Name), assetDataPath);
+                Data = ScriptableObject.CreateInstance(partDataType.Name);
+                AssetDatabase.CreateAsset(Data, assetDataPath);
             }
         }
     }

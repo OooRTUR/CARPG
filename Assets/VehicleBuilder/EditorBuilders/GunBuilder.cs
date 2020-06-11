@@ -17,29 +17,43 @@ namespace VehicleBuilder
             set
             {
                 gunData = value;
-                gunData.SurfPositionChanged += UpdateSurfPosition;
-                UpdateSurfPosition(GunData, null);
             }
         }
         public BuilderParts Parts { get; private set; }
 
-        public string prefabGuid;
-
-        public void UpdatePosition(Vector3 subtract)
+        #region Vector3 Handles
+        public Vector3 JoinPointHandle
         {
-            gunData.CenterPosition += subtract;
-            gunData.SurfPosition += subtract;
-            gunData.JoinPoint += subtract;
-            gunData.FirePoint += subtract;
+            get { return gunData.JoinPoint.GetAbsolutePosition(transform.position); }
+            set { gunData.JoinPoint.SetRelativePosition(transform.position, value); }
+        }
+
+        public Vector3 FirePointHandle
+        {
+            get { return gunData.FirePoint.GetAbsolutePosition(transform.position); }
+            set { gunData.FirePoint.SetRelativePosition(transform.position, value); }
+        }
+
+        public Vector3 PositionHandle
+        {
+            get { return transform.position; }
+            set
+            {
+                transform.position = value;
+                OnPositionChanged();
+            }
+        }
+        #endregion
+
+        public void UpdatePosition(Vector3 oldPosition, Vector3 newPosition)
+        {
+
         }
 
 
         public void OnEnable()
         {
             Parts = new BuilderParts(transform.parent);
-
-            if (GunData == null)
-                GunData = (GunBuildData)ScriptableObject.CreateInstance(typeof(GunBuildData));
         }
 
         private void OnDrawGizmosSelected()
@@ -48,14 +62,14 @@ namespace VehicleBuilder
             {
                 Gizmos.DrawIcon(transform.position, "sphere.png", false);
             }
-            Gizmos.DrawIcon(gunData.FirePoint, "fire.png", false);
-            Gizmos.DrawIcon(gunData.JoinPoint, "join.png", false);
-            Gizmos.DrawIcon(gunData.CenterPosition, "center.png", false);
+            Gizmos.DrawIcon(FirePointHandle, "fire.png", false);
+            Gizmos.DrawIcon(JoinPointHandle, "join.png", false);
         }
 
-        private void UpdateSurfPosition(object sender, EventArgs e)
+
+        private void OnPositionChanged()
         {
-            transform.position = ((GunBuildData)sender).SurfPosition;
+
         }
 
 
