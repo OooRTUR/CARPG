@@ -19,146 +19,64 @@ namespace VehicleBuilder
 
         GunBuilder builder;
 
-        /// <summary>
-        /// Create gun object with empty parent
-        /// </summary>
-        [MenuItem("Tools/Create Centered Gun From Gun Models Folder")]
-        static void CreateCenteredGun()
-        {
-            string[] selectedGunGuids = Selection.assetGUIDs;
-            if (selectedGunGuids.Length != 1)
-            {
-                Debug.LogWarning("You need to choose only one gun object");
-                return;
-            }
-
-            var path = AssetDatabase.GUIDToAssetPath(selectedGunGuids.First());
-            var config = (BuilderConfiguration)ScriptableObject.CreateInstance(typeof(BuilderConfiguration));
-
-            if (Path.Combine(config.PrefabsFolderPath, "Gun\\Models") != Path.GetDirectoryName(path))
-            {
-                Debug.LogWarning("This is not gun models path");
-                return;
-            }
-
-            string gunModelName = Path.GetFileNameWithoutExtension(path);
-
-            var gun = new GameObject(gunModelName);
-            var gunModelAsset = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-            var gunSurf = GameObject.Instantiate(gunModelAsset, gun.transform);
-            gunSurf.name = "Surf";
-            gun.AddComponent<Gun>();
-            Undo.RegisterCreatedObjectUndo(gun, "Gun Object Created");
-
-            Selection.activeGameObject = gun;
-        }
-
         private void OnEnable()
         {
-            builder = Selection.activeGameObject.GetComponent<GunBuilder>();
+            builder = (GunBuilder)target;
             toolSelection = new SelectionE(new string[]{
-            "Move Direction Points",
-            "Move Surf",
-            "Move Center",
-        });
+                "Move Direction Points",
+                "Move Surf",
+                "Move Center",
+            });
             dirPointSelection = new SelectionE(new string[]
             {
-            "Fire Point",
-            "Join Point"
+                "Fire Point",
+                "Join Point"
             });
         }
 
         protected virtual void OnSceneGUI()
         {
-
-            if (toolSelection.Selected == 0)
-            {
-                builder._Mode = GunBuilder.Mode.SetDirectionPoints;
-                OnToolSelection_MoveDirectionPoints();
-            }
-            if (toolSelection.Selected == 1)
-            {
-                builder._Mode = GunBuilder.Mode.MoveSurf;
-                OnToolSelection_MoveSurf();
-            }
-            if (toolSelection.Selected == 2)
-            {
-                builder._Mode = GunBuilder.Mode.MoveCenter;
-            }
-
-
+            toolSelection.OnSelected(0, OnToolSelection_MoveDirectionPoints);
+            toolSelection.OnSelected(1, OnToolSelection_MoveSurf);
         }
 
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
-            if (toolSelection.Selected == 2)
-            {
-                dirPointSelection.OnGUI();
-            }
+            toolSelection.OnSelected(0,dirPointSelection.OnGUI);
             GUIExtensions.Button("Apply Changes", OnApplyButtonPressed);
         }
 
-        #region OnToolSelection 
         private void OnToolSelection_MoveSurf()
         {
-            var gunBuilder = (GunBuilder)target;
+            builder._Mode = GunBuilder.Mode.MoveSurf;
             Tools.current = Tool.Custom;
 
-            GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "PositionHandle");
+            GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "PositionHandle");
         }
 
         private void OnToolSelection_MoveDirectionPoints()
         {
-            var gunBuilder = (GunBuilder)target;
+            builder._Mode = GunBuilder.Mode.SetDirectionPoints;
             Tools.current = Tool.Custom;
 
-            if (dirPointSelection.Selected == 0)
-            {
-                GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "FirePointHandle");
-            }
-            else if (dirPointSelection.Selected == 1)
-            {
-                GUIExtensions.PositionHandle(gunBuilder, typeof(GunBuilder), "JoinPointHandle");
-            }
-
-
-
-
+            dirPointSelection.OnSelected(0, FirePointPositionHandle);
+            dirPointSelection.OnSelected(1, JoinPointPositionHandle);
         }
-        #endregion
+
+        private void FirePointPositionHandle() 
+        {
+            GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "FirePointHandle");
+        }
+        private void JoinPointPositionHandle()
+        {
+            GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "JoinPointHandle");
+        }
 
         private void OnApplyButtonPressed()
         {
-            //builder.gunData.
-
-            /*
-             * SAVE DATA
-             * pos = getSurfPos()
-             * headAssetName = GetHeadAssetName()
-             * gunAssetName = GetGunAssetName()
-             * newAsset =  CreateAsset in headAsset.Folder
-             *  where newAsset.name = headAssetName_PositionData.asset
-             */
             AssetDatabase.Refresh();
         }
-
-        //private void InitTempData()
-        //{
-
-
-        //    if (res.Length < 1)
-        //    {
-        //        data = ScriptableObject.CreateInstance<VehicleBuilderTempData>();
-        //        AssetDatabase.CreateAsset(data, $"Assets/VehicleBuilderTempData/{vehicleName}.asset");
-        //    }
-        //    else
-        //    {
-        //        data = (VehicleBuilderTempData)AssetDatabase.LoadAssetAtPath($"Assets/VehicleBuilderTempData/{vehicleName}.asset", typeof(VehicleBuilderTempData));
-        //    }
-        //    AssetDatabase.SaveAssets();
-        //    AssetDatabase.Refresh();
-        //}
     }
 
 }

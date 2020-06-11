@@ -59,4 +59,12 @@ public class SelectionE
     {
         this.options = options.ToArray();
     }
+
+    public void OnSelected(int selected, Action action)
+    {
+        if(Selected == selected)
+        {
+            action.Invoke();
+        }
+    }
 }

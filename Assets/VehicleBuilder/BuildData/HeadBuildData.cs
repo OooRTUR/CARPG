@@ -6,5 +6,15 @@ namespace VehicleBuilder
 {
     public class HeadBuildData : ScriptableObject
     {
+        public RelativeVector3 GunSurfPosition { set; get; }
+        public RelativeVector3 GunCenterPosition { set; get; }
+
+        private void OnEnable()
+        {
+            if (GunSurfPosition == null)
+                GunSurfPosition = new RelativeVector3();
+            if (GunCenterPosition == null)
+                GunCenterPosition = new RelativeVector3();
+        }
     }
 }
