@@ -54,6 +54,10 @@ namespace VehicleBuilder
          *          ->  gun2.asset
          *          ->  Models
          *      ->  Head
+         *          ->  head1.prefab
+         *          ->  head1_data
+         *              ->  head1_gun1.asset
+         *              ->  head1_gun2.asset
          *      ->  Body
          *  BuilderConfiguration.asset
          */
@@ -70,23 +74,5 @@ namespace VehicleBuilder
             get { return createModelsFolderRequired; }
             set { createModelsFolderRequired = true; }
         }
-    }
-
-    public class PartContext
-    {
-        public UnityEngine.Object Prefab { get; private set; }
-        public UnityEngine.Object Data { get; private set; }
-
-        public PartContext(string path, Type partDataType)
-        {
-            Prefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-            string assetDataPath = Path.ChangeExtension(path, ".asset");
-            Data = AssetDatabase.LoadAssetAtPath(assetDataPath, partDataType);
-            if (Data == null)
-            {
-                Data = ScriptableObject.CreateInstance(partDataType.Name);
-                AssetDatabase.CreateAsset(Data, assetDataPath);
-            }
-        }
-    }
+    } 
 }

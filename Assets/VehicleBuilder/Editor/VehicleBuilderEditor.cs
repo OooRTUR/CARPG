@@ -77,19 +77,19 @@ namespace VehicleBuilder
 
         private void BodySelection_SelectedChanged(object sender, EventArgs e)
         {
-            builder.SetBody(new PartContext(bodySelection.GetSelectedPath(), typeof(BodyBuildData)));
+            builder.SetBody(new VehiclePartContext(bodySelection.GetSelectedPath(), typeof(BodyBuildData)));
             Selection.activeGameObject = builder.Parts.GetBody().gameObject;
         }
 
         private void HeadSelection_SelectedChanged(object sender, EventArgs e)
         {
-            builder.SetHead(new PartContext(headSelection.GetSelectedPath(), typeof(HeadBuildData)));
+            builder.SetHead(new VehiclePartContext(headSelection.GetSelectedPath(), typeof(HeadBuildData)));
             Selection.activeGameObject = builder.Parts.GetHead().gameObject;
         }
 
         private void GunSelection_SelectedChanged(object sender, EventArgs e)
         {
-            builder.SetGun(new PartContext(gunSelection.GetSelectedPath(), typeof(GunBuildData)));
+            builder.SetGun(new VehiclePartContext(gunSelection.GetSelectedPath(), typeof(GunBuildData)));
             Selection.activeGameObject = builder.Parts.GetGun().gameObject;
         }
 

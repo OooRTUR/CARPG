@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace VehicleBuilder
 {
-    public class HeadBuildData : ScriptableObject
+    public class HeadBuildData : BaseBuildData
     {
+        public string AttachedGunTypeName { set; get; }
+
         public RelativeVector3 GunSurfPosition { set; get; }
         public RelativeVector3 GunCenterPosition { set; get; }
 
@@ -17,4 +19,5 @@ namespace VehicleBuilder
                 GunCenterPosition = new RelativeVector3();
         }
     }
+
 }

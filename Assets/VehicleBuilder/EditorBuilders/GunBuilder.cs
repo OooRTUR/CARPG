@@ -1,37 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEditor;
 
 namespace VehicleBuilder
 {
 
     [ExecuteInEditMode]
-    public class GunBuilder : MonoBehaviour
+    public class GunBuilder : BaseBuilder
     {
         public enum Mode { MoveCenter, MoveSurf, SetDirectionPoints }
         public Mode _Mode;
-        private GunBuildData gunData;
-        public GunBuildData GunData
-        {
-            get { return gunData; }
-            set
-            {
-                gunData = value;
-            }
-        }
-        public BuilderParts Parts { get; private set; }
+        
+        private GunBuildData _GunBuildData { get { return BuildData as GunBuildData; } }
+        
 
         #region Vector3 Handles
         public Vector3 JoinPointHandle
         {
-            get { return gunData.JoinPoint.GetAbsolutePosition(transform.position); }
-            set { gunData.JoinPoint.SetRelativePosition(transform.position, value); }
+            get { return _GunBuildData.JoinPoint.GetAbsolutePosition(transform.position); }
+            set { _GunBuildData.JoinPoint.SetRelativePosition(transform.position, value); }
         }
 
         public Vector3 FirePointHandle
         {
-            get { return gunData.FirePoint.GetAbsolutePosition(transform.position); }
-            set { gunData.FirePoint.SetRelativePosition(transform.position, value); }
+            get { return _GunBuildData.FirePoint.GetAbsolutePosition(transform.position); }
+            set { _GunBuildData.FirePoint.SetRelativePosition(transform.position, value); }
         }
 
         public Vector3 PositionHandle
@@ -50,10 +44,9 @@ namespace VehicleBuilder
 
         }
 
-
-        public void OnEnable()
+        protected override void Awake()
         {
-            Parts = new BuilderParts(transform.parent);
+            base.Awake();
         }
 
         private void OnDrawGizmosSelected()

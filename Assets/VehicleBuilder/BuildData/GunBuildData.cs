@@ -4,7 +4,7 @@ using System;
 
 namespace VehicleBuilder
 {
-    public class GunBuildData : ScriptableObject
+    public class GunBuildData : BaseBuildData
     {
         public RelativeVector3 JoinPoint { set; get; }
         public RelativeVector3 FirePoint { set; get; }

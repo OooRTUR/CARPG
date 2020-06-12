@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6c7b2175b34904897599934653cb07, type: 3}
-  m_Name: Gun.76mm
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Head.Turret
   m_EditorClassIdentifier: 

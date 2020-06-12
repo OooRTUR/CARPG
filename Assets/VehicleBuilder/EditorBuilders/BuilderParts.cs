@@ -23,5 +23,10 @@ namespace VehicleBuilder
         {
             return transform.Find("Head");
         }
+
+        public VehicleBuilder GetVehicleBuilder()
+        {
+            return transform.GetComponent<VehicleBuilder>();
+        }
     }
 }

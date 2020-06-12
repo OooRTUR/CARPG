@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace VehicleBuilder
 {
@@ -13,6 +14,11 @@ namespace VehicleBuilder
         private void Awake()
         {
             Parts = new BuilderParts(transform);
+            contextStorage = new Dictionary<string, VehiclePartContext>()
+            {
+                {nameof(VehicleBuilder), null },
+                {nameof(HeadBuilder), null },
+            };
         }
 
         private GameObject InstantiatePart(GameObject partPrefab, string partName)
@@ -22,37 +28,44 @@ namespace VehicleBuilder
             return newPart;
         }
 
-        public void SetBody(PartContext partContext)
+        private Dictionary<string, VehiclePartContext> contextStorage;
+        public VehiclePartContext GetContext(string partHierarchyTypeName)
+        {
+            return contextStorage[partHierarchyTypeName];
+        }
+
+        public void SetBody(VehiclePartContext partContext)
         {
             Transform existPart = Parts.GetBody();
             if (existPart != null)
             {
                 DestroyImmediate(existPart.gameObject);
             }
-            InstantiatePart((GameObject)partContext.Prefab, "Body");
+            InstantiatePart((GameObject)partContext.GetPrefab(), "Body");
         }
 
-        public void SetHead(PartContext partContext)
+        public void SetHead(VehiclePartContext partContext)
         {
+            contextStorage[nameof(HeadBuilder)] = partContext;
             Transform existPart = Parts.GetHead();
             if (existPart != null)
             {
                 DestroyImmediate(existPart.gameObject);
             }
-            GameObject res = InstantiatePart((GameObject)partContext.Prefab, "Head");
-            res.AddComponent<HeadBuilder>();
+            GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Head");
+            var headBuilder = res.AddComponent<HeadBuilder>();
         }
 
-        public void SetGun(PartContext partContext)
+        public void SetGun(VehiclePartContext partContext)
         {
+            contextStorage[nameof(GunBuilder)] = partContext;
             Transform existPart = Parts.GetGun();
             if (existPart != null)
             {
                 DestroyImmediate(existPart.gameObject);
             }
-            GameObject res = InstantiatePart((GameObject)partContext.Prefab, "Gun");
+            GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Gun");
             var gunBuilder = res.AddComponent<GunBuilder>();
-            gunBuilder.GunData = (GunBuildData)partContext.Data;
         }
     }
 }
