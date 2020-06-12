@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEditor;
 using System.IO;
 using System;
+using System.Linq;
 
 public class VehiclePartContext
 {
@@ -29,6 +30,38 @@ public class VehiclePartContext
         }
         return asset;
     }
+
+    public void AddToAsset(UnityEngine.Object data)
+    {
+        var assetPath = GetAssetPath();
+        UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+        var res = assets.Where(asset => asset.name == data.name).ToList();
+        if (res.Count < 1){
+            AssetDatabase.AddObjectToAsset(data, assetPath);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(data));
+        }
+        
+    }
+
+    public UnityEngine.Object GetSubAsset(string subAssetName, Type subAssetType)
+    {
+        UnityEngine.Object res = null;
+        var assetPath = GetAssetPath();
+        UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+        var foundSubAssets = assets.Where(asset => asset.name == subAssetName).ToList();
+        if (foundSubAssets.Count < 1)
+        {
+            res = ScriptableObject.CreateInstance(subAssetType);
+            res.name = subAssetName;
+            AssetDatabase.AddObjectToAsset(res, assetPath);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(res));
+        }
+        else
+        {
+            res = foundSubAssets[0];
+        }
+        return res;
+    }
     
     public GameObject GetPrefab()
     {
@@ -36,8 +69,11 @@ public class VehiclePartContext
     }
     public UnityEngine.Object GetAsset()
     {
-        string assetPath = Path.ChangeExtension(this.path,"asset");
-        return (UnityEngine.Object)AssetDatabase.LoadAssetAtPath(assetPath, typeof(UnityEngine.Object));
+        return (UnityEngine.Object)AssetDatabase.LoadAssetAtPath(GetAssetPath(), typeof(UnityEngine.Object));
+    }
+    public string GetAssetPath()
+    {
+        return Path.ChangeExtension(path, "asset");
     }
     public string GetPartTypeName()
     {

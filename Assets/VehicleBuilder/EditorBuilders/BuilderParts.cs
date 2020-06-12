@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
 
 namespace VehicleBuilder
 {
@@ -12,6 +14,10 @@ namespace VehicleBuilder
         public Transform GetBody()
         {
             return transform.Find("Body");
+        }
+        public GunBuilder GetGunBuilder()
+        {
+            return GetGun().GetComponent<GunBuilder>();
         }
 
         public Transform GetGun()

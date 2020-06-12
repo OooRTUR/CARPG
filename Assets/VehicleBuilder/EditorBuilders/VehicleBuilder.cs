@@ -10,6 +10,7 @@ namespace VehicleBuilder
     public class VehicleBuilder : MonoBehaviour
     {
         public BuilderParts Parts { get; private set; }
+        private Dictionary<string, VehiclePartContext> contextStorage;
 
         private void Awake()
         {
@@ -28,7 +29,7 @@ namespace VehicleBuilder
             return newPart;
         }
 
-        private Dictionary<string, VehiclePartContext> contextStorage;
+
         public VehiclePartContext GetContext(string partHierarchyTypeName)
         {
             return contextStorage[partHierarchyTypeName];
@@ -55,6 +56,7 @@ namespace VehicleBuilder
             GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Head");
             var headBuilder = res.AddComponent<HeadBuilder>();
         }
+        public event EventHandler GunChanged;
 
         public void SetGun(VehiclePartContext partContext)
         {
@@ -66,6 +68,7 @@ namespace VehicleBuilder
             }
             GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Gun");
             var gunBuilder = res.AddComponent<GunBuilder>();
+            GunChanged?.Invoke(this, new EventArgs());
         }
     }
 }

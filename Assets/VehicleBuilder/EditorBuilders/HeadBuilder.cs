@@ -18,27 +18,30 @@ namespace VehicleBuilder
         protected override void Awake()
         {
             base.Awake();
+            Parts.GetVehicleBuilder().GunChanged += HeadBuilder_GunChanged;
+            
+        }
+
+        private void HeadBuilder_GunChanged(object sender, EventArgs e)
+        {
+            InitBuildData();
+        }
+
+        private void InitBuildData()
+        {
+            BuildData = (HeadBuildData)Context.GetSubAsset(Parts.GetGunBuilder().Context.GetPartTypeName(), typeof(HeadBuildData));
         }
 
 
         private void Start()
         {
-//            string path = AssetDatabase.GetAssetPath(HeadData);
-//            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
-//            string gunTypeName = Parts.GetGun().GetComponent<GunBuilder>().GunData.PartTypeName;
-//            List<UnityEngine.Object> res = assets.
-//                Where(asset => ((HeadBuildData)asset).AttachedGunTypeName == gunTypeName).ToList();
-//            if (res.Count == 0)
-//            {
-//                HeadData = (HeadBuildData)ScriptableObject.CreateInstance(typeof(HeadBuildData));
-//                HeadData.PartTypeName = Path.GetFileNameWithoutExtension(path);
-//                HeadData.AttachedGunTypeName = gunTypeName;
-//                AssetDatabase.AddObjectToAsset(HeadData, path);
-//            }
-//            else
-//            {
-//z                HeadData = (HeadBuildData)res[0];
-//            }
+
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawIcon(GunSurfPositionHandle, "fire.png", false);
+            Gizmos.DrawIcon(GunCenterPositionHandle, "join.png", false);
         }
 
         public Vector3 PositionHandle

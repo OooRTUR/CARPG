@@ -6,8 +6,20 @@ namespace VehicleBuilder
 {
     public class GunBuildData : BaseBuildData
     {
-        public RelativeVector3 JoinPoint { set; get; }
-        public RelativeVector3 FirePoint { set; get; }
+        [SerializeField]
+        private RelativeVector3 joinPoint;
+        [SerializeField]
+        private RelativeVector3 firePoint;
+        public RelativeVector3 JoinPoint
+        {
+            set { joinPoint = value; }
+            get { return joinPoint; }
+        }
+        public RelativeVector3 FirePoint
+        {
+            get { return firePoint; }
+            set { firePoint = value; }
+        }
 
         private void OnEnable()
         {

@@ -29,19 +29,21 @@ namespace VehicleBuilder
         #region gui actions
         private void ApplyChanges()
         {
-
             AssetDatabase.Refresh();
         }
         private void OnToolSelection_MoveHead()
         {
+            Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(HeadBuilder), "PositionHandle");
         }
         private void OnToolSelection_MoveGunCenter()
         {
+            Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(HeadBuilder), "GunCenterPositionHandle");
         }
         private void OnToolSelection_MoveGunSurf()
         {
+            Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(HeadBuilder), "GunSurfPositionHandle");
         }
         #endregion

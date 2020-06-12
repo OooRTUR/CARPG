@@ -6,10 +6,21 @@ namespace VehicleBuilder
 {
     public class HeadBuildData : BaseBuildData
     {
-        public string AttachedGunTypeName { set; get; }
+        [SerializeField]
+        private RelativeVector3 gunSurfPosition;
+        [SerializeField]
+        private RelativeVector3 gunCenterPosition;
 
-        public RelativeVector3 GunSurfPosition { set; get; }
-        public RelativeVector3 GunCenterPosition { set; get; }
+        public RelativeVector3 GunSurfPosition
+        {
+            get { return gunSurfPosition; }
+            set { gunSurfPosition = value; }
+        }
+        public RelativeVector3 GunCenterPosition
+        {
+            get { return gunCenterPosition; }
+            set { gunCenterPosition = value; }
+        }
 
         private void OnEnable()
         {
@@ -17,6 +28,20 @@ namespace VehicleBuilder
                 GunSurfPosition = new RelativeVector3();
             if (GunCenterPosition == null)
                 GunCenterPosition = new RelativeVector3();
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other != null)
+            {
+                return base.name == ((UnityEngine.Object)other).name;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.name.GetHashCode();
         }
     }
 
