@@ -18,7 +18,7 @@ namespace VehicleBuilder
         protected override void Awake()
         {
             base.Awake();
-            Parts.GetVehicleBuilder().GunChanged += HeadBuilder_GunChanged;
+            Parts.GetVehicleBuilder().PartChanged += HeadBuilder_GunChanged;
             
         }
 
@@ -40,8 +40,28 @@ namespace VehicleBuilder
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.DrawIcon(GunSurfPositionHandle, "fire.png", false);
             Gizmos.DrawIcon(GunCenterPositionHandle, "join.png", false);
+        }
+
+        private void OnDrawGizmos()
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+                UnityEditor.SceneView.RepaintAll();
+            }
+#endif
+        }
+
+        private void UpdateGunPosition()
+        {
+            Parts.GetGun().transform.position = GunSurfPositionHandle;
+        }
+
+        private void Update()
+        {
+            UpdateGunPosition();
         }
 
         public Vector3 PositionHandle

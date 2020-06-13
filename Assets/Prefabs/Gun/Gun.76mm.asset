@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6c7b2175b34904897599934653cb07, type: 3}
   m_Name: Gun.76mm
   m_EditorClassIdentifier: 
+  joinPoint:
+    position: {x: 0, y: 0, z: 1.0981671}
+  firePoint:
+    position: {x: 0, y: 0, z: -1.0769355}

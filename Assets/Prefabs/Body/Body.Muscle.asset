@@ -1,34 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2601955622382506817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Turret
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Body.Mech
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &7433156952529560258
+--- !u!114 &-5055442635578119418
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,4 +13,32 @@ MonoBehaviour:
   m_Name: Head.Solid
   m_EditorClassIdentifier: 
   headSurfPosition:
-    position: {x: 0, y: 1.2118433, z: -0.39617497}
+    position: {x: 0, y: 0.4371841, z: 0.71817446}
+--- !u!114 &-393341039845727632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Name: Head.Turret
+  m_EditorClassIdentifier: 
+  headSurfPosition:
+    position: {x: 0, y: 0.6207361, z: 0.6759193}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Name: Body.Muscle
+  m_EditorClassIdentifier: 
+  headSurfPosition:
+    position: {x: 0, y: 0, z: 0}

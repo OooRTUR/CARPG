@@ -12,7 +12,7 @@ namespace VehicleBuilder
         private string editName = "VehicleEditor";
         private string bodyDefinition = "Body";
         private string headDefinition = "Head";
-        private string gunDefinition = "Gun";
+        private string gunDefinition = "Gun";        
 
         public string EditName { get { return editName; } }
         public string PrefabsFolderPath { get { return $"Assets\\Prefabs"; } }

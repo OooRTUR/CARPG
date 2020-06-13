@@ -7,10 +7,8 @@ using System.Linq;
 
 public class VehiclePartContext
 {
-    public string assetTypeName;
     private string path;
 
-    private GameObject prefab;
     private UnityEngine.Object asset;
 
     public VehiclePartContext(string path, Type assetType)
@@ -29,18 +27,6 @@ public class VehiclePartContext
             AssetDatabase.CreateAsset(asset, assetPath);
         }
         return asset;
-    }
-
-    public void AddToAsset(UnityEngine.Object data)
-    {
-        var assetPath = GetAssetPath();
-        UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-        var res = assets.Where(asset => asset.name == data.name).ToList();
-        if (res.Count < 1){
-            AssetDatabase.AddObjectToAsset(data, assetPath);
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(data));
-        }
-        
     }
 
     public UnityEngine.Object GetSubAsset(string subAssetName, Type subAssetType)

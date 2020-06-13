@@ -48,11 +48,6 @@ namespace VehicleBuilder
         }
         #endregion
 
-        public void OnGunPrefabChanged(string gunTypeName)
-        {
-
-        }
-
 
         private void OnEnable()
         {

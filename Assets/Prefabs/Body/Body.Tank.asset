@@ -1,6 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2601955622382506817
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Name: Body.Tank
+  m_EditorClassIdentifier: 
+  headSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &343803547110221055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13,22 +27,8 @@ MonoBehaviour:
   m_Name: Head.Turret
   m_EditorClassIdentifier: 
   headSurfPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Body.Mech
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &7433156952529560258
+    position: {x: 0, y: 0.9004469, z: -0.7652265}
+--- !u!114 &638953150557983696
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,4 +41,4 @@ MonoBehaviour:
   m_Name: Head.Solid
   m_EditorClassIdentifier: 
   headSurfPosition:
-    position: {x: 0, y: 1.2118433, z: -0.39617497}
+    position: {x: 0, y: 0.77909756, z: -0.8429959}

@@ -29,20 +29,6 @@ namespace VehicleBuilder
             if (GunCenterPosition == null)
                 GunCenterPosition = new RelativeVector3();
         }
-
-        public override bool Equals(object other)
-        {
-            if (other != null)
-            {
-                return base.name == ((UnityEngine.Object)other).name;
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.name.GetHashCode();
-        }
     }
 
 }

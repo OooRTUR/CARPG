@@ -15,10 +15,6 @@ namespace VehicleBuilder
         {
             return transform.Find("Body");
         }
-        public GunBuilder GetGunBuilder()
-        {
-            return GetGun().GetComponent<GunBuilder>();
-        }
 
         public Transform GetGun()
         {
@@ -28,6 +24,15 @@ namespace VehicleBuilder
         public Transform GetHead()
         {
             return transform.Find("Head");
+        }
+
+        public GunBuilder GetGunBuilder()
+        {
+            return GetGun().GetComponent<GunBuilder>();
+        }
+        public HeadBuilder GetHeadBuilder()
+        {
+            return GetHead().GetComponent<HeadBuilder>();
         }
 
         public VehicleBuilder GetVehicleBuilder()

@@ -38,6 +38,7 @@ namespace VehicleBuilder
         {
             toolSelection.OnSelected(0, OnToolSelection_MoveDirectionPoints);
             toolSelection.OnSelected(1, OnToolSelection_MoveSurf);
+            EditorUtility.SetDirty(builder.BuildData);
         }
 
         public override void OnInspectorGUI()
@@ -45,6 +46,7 @@ namespace VehicleBuilder
             toolSelection.OnGUI();
             toolSelection.OnSelected(0,dirPointSelection.OnGUI);
             GUIExtensions.Button("Apply Changes", OnApplyButtonPressed);
+            
         }
 
         private void OnToolSelection_MoveSurf()
@@ -75,7 +77,7 @@ namespace VehicleBuilder
 
         private void OnApplyButtonPressed()
         {
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh();            
         }
     }
 

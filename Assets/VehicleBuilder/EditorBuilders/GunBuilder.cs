@@ -13,7 +13,11 @@ namespace VehicleBuilder
         public Mode _Mode;
         
         private GunBuildData _GunBuildData { get { return BuildData as GunBuildData; } }
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+        }
 
         #region Vector3 Handles
         public Vector3 JoinPointHandle
@@ -44,10 +48,7 @@ namespace VehicleBuilder
 
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+
 
         private void OnDrawGizmosSelected()
         {
@@ -58,6 +59,8 @@ namespace VehicleBuilder
             Gizmos.DrawIcon(FirePointHandle, "fire.png", false);
             Gizmos.DrawIcon(JoinPointHandle, "join.png", false);
         }
+
+   
 
 
         private void OnPositionChanged()

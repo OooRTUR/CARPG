@@ -19,7 +19,31 @@ namespace VehicleBuilder
             {
                 {nameof(VehicleBuilder), null },
                 {nameof(HeadBuilder), null },
+                {nameof(BodyBuilder), null }
             };
+        }
+
+        Queue<Action> Tasks = new Queue<Action>();
+        private void Update()
+        {
+            while (Tasks.Count > 0)
+            {
+                Action currentAction = Tasks.Dequeue();
+                currentAction.Invoke();
+                if (Tasks.Count == 0)
+                    PartChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        void OnDrawGizmos()
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+                UnityEditor.SceneView.RepaintAll();
+            }
+#endif
         }
 
         private GameObject InstantiatePart(GameObject partPrefab, string partName)
@@ -37,38 +61,51 @@ namespace VehicleBuilder
 
         public void SetBody(VehiclePartContext partContext)
         {
-            Transform existPart = Parts.GetBody();
-            if (existPart != null)
+            Tasks.Enqueue(delegate
             {
-                DestroyImmediate(existPart.gameObject);
-            }
-            InstantiatePart((GameObject)partContext.GetPrefab(), "Body");
+                contextStorage[nameof(BodyBuilder)] = partContext;
+                Transform existPart = Parts.GetBody();
+                if (existPart != null)
+                {
+                    DestroyImmediate(existPart.gameObject);
+                }
+                var res =InstantiatePart((GameObject)partContext.GetPrefab(), "Body");
+                res.AddComponent<BodyBuilder>();
+            });
+
         }
 
         public void SetHead(VehiclePartContext partContext)
         {
-            contextStorage[nameof(HeadBuilder)] = partContext;
-            Transform existPart = Parts.GetHead();
-            if (existPart != null)
+            Tasks.Enqueue(delegate
             {
-                DestroyImmediate(existPart.gameObject);
-            }
-            GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Head");
-            var headBuilder = res.AddComponent<HeadBuilder>();
+                contextStorage[nameof(HeadBuilder)] = partContext;
+                Transform existPart = Parts.GetHead();
+                if (existPart != null)
+                {
+                    DestroyImmediate(existPart.gameObject);
+                }
+                GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Head");
+                var headBuilder = res.AddComponent<HeadBuilder>();
+            });
+
         }
-        public event EventHandler GunChanged;
+        public event EventHandler PartChanged;
 
         public void SetGun(VehiclePartContext partContext)
         {
-            contextStorage[nameof(GunBuilder)] = partContext;
-            Transform existPart = Parts.GetGun();
-            if (existPart != null)
+            Tasks.Enqueue(delegate
             {
-                DestroyImmediate(existPart.gameObject);
-            }
-            GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Gun");
-            var gunBuilder = res.AddComponent<GunBuilder>();
-            GunChanged?.Invoke(this, new EventArgs());
+                contextStorage[nameof(GunBuilder)] = partContext;
+                Transform existPart = Parts.GetGun();
+                if (existPart != null)
+                {
+                    DestroyImmediate(existPart.gameObject);
+                }
+                GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Gun");
+                var gunBuilder = res.AddComponent<GunBuilder>();
+            });
+
         }
     }
 }
