@@ -1,20 +1,40 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using Extenstions.Editor;
+using Extensions.Editor;
 
 namespace VehicleBuilder
 {
+
     [CustomEditor(typeof(HeadBuilder))]
-    public class HeadBuilderEditor : Editor
+    public class HeadBuilderEditor : BaseBuilderEditor
     {
-        HeadBuilder builder;
         SelectionE toolSelection;
+
+        private HeadBuilder Builder { get { return base.builder as HeadBuilder; } }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            toolSelection = new SelectionE(new string[]
+            {
+                "Move Head",
+                "Move Gun Center",
+                "Move Gun Surf"
+            });
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+        }
 
         protected virtual void OnSceneGUI()
         {
 
-            toolSelection.OnSelected(0, OnToolSelection_MoveHead);
-            toolSelection.OnSelected(1, OnToolSelection_MoveGunCenter);
-            toolSelection.OnSelected(2, OnToolSelection_MoveGunSurf);
+            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveHead);
+            toolSelection.OnSelected_Invoke(1, OnToolSelection_MoveGunCenter);
+            toolSelection.OnSelected_Invoke(2, OnToolSelection_MoveGunSurf);
 
             
         }
@@ -22,15 +42,10 @@ namespace VehicleBuilder
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
-            GUIExtensions.Button("Apply Changes", ApplyChanges);
         }
 
 
         #region gui actions
-        private void ApplyChanges()
-        {
-            AssetDatabase.Refresh();
-        }
         private void OnToolSelection_MoveHead()
         {
             Tools.current = Tool.Custom;
@@ -49,16 +64,7 @@ namespace VehicleBuilder
         #endregion
 
 
-        private void OnEnable()
-        {
-            builder = (HeadBuilder)target;
-            toolSelection = new SelectionE(new string[]
-            {
-                "Move Head",
-                "Move Gun Center",
-                "Move Gun Surf"
-            });
-        }
+ 
 
 
     }

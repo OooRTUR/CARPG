@@ -23,13 +23,21 @@ namespace VehicleBuilder
         public Vector3 JoinPointHandle
         {
             get { return _GunBuildData.JoinPoint.GetAbsolutePosition(transform.position); }
-            set { _GunBuildData.JoinPoint.SetRelativePosition(transform.position, value); }
+            set 
+            { 
+                _GunBuildData.JoinPoint.SetRelativePosition(transform.position, value);
+                OnDataChanged();
+            }
         }
 
         public Vector3 FirePointHandle
         {
             get { return _GunBuildData.FirePoint.GetAbsolutePosition(transform.position); }
-            set { _GunBuildData.FirePoint.SetRelativePosition(transform.position, value); }
+            set 
+            { 
+                _GunBuildData.FirePoint.SetRelativePosition(transform.position, value);
+                OnDataChanged();
+            }
         }
 
         public Vector3 PositionHandle

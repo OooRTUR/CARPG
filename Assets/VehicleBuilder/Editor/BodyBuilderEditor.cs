@@ -1,29 +1,38 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
+using System.Collections;
 using VehicleBuilder;
+using Extenstions.Editor;
+using Unity.EditorCoroutines.Editor;
+using Extensions.Editor;
 
 namespace VehicleBuilder
 {    
     [CustomEditor(typeof(BodyBuilder))]
-    public class BodyBuilderEditor : Editor
+    public class BodyBuilderEditor : BaseBuilderEditor
     {
-        BodyBuilder builder;
         SelectionE toolSelection;
 
-        private void OnEnable()
+        private BodyBuilder Builder { get { return base.builder as BodyBuilder; } }
+
+        protected override void OnEnable()
         {
-            builder = (BodyBuilder)target;
+            base.OnEnable();
             toolSelection = new SelectionE(new string[]
             {
                 "Move Head",
-            });
-            
+            });          
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
         }
 
         private void OnSceneGUI()
         {
-            toolSelection.OnSelected(0, OnToolSelection_MoveHead);
+            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveHead);
         }
 
         public override void OnInspectorGUI()

@@ -49,7 +49,11 @@ namespace VehicleBuilder
         public Vector3 HeadPositionHandle
         {
             get { return _BodyBuilData.HeadSurfPosition.GetAbsolutePosition(transform.position); }
-            set { _BodyBuilData.HeadSurfPosition.SetRelativePosition(transform.position, value); }
+            set 
+            { 
+                _BodyBuilData.HeadSurfPosition.SetRelativePosition(transform.position, value);
+                OnDataChanged();
+            }
         }
 
  

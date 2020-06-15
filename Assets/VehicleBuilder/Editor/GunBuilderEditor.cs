@@ -7,21 +7,23 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using Extenstions.Editor;
+using Extensions.Editor;
 
 namespace VehicleBuilder
 {
 
     [CustomEditor(typeof(GunBuilder))]
-    public class GunBuilderEditor : Editor
+    public class GunBuilderEditor : BaseBuilderEditor
     {
         SelectionE toolSelection;
         SelectionE dirPointSelection;
 
-        GunBuilder builder;
+        private GunBuilder Builder { get { return base.builder as GunBuilder; } }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            builder = (GunBuilder)target;
+            base.OnEnable();
             toolSelection = new SelectionE(new string[]{
                 "Move Direction Points",
                 "Move Surf",
@@ -32,26 +34,31 @@ namespace VehicleBuilder
                 "Fire Point",
                 "Join Point"
             });
+
+ 
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
         }
 
         protected virtual void OnSceneGUI()
         {
-            toolSelection.OnSelected(0, OnToolSelection_MoveDirectionPoints);
-            toolSelection.OnSelected(1, OnToolSelection_MoveSurf);
-            EditorUtility.SetDirty(builder.BuildData);
+            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveDirectionPoints);
+            toolSelection.OnSelected_Invoke(1, OnToolSelection_MoveSurf);
+            EditorUtility.SetDirty((builder as GunBuilder).BuildData);
         }
 
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
-            toolSelection.OnSelected(0,dirPointSelection.OnGUI);
-            GUIExtensions.Button("Apply Changes", OnApplyButtonPressed);
-            
+            toolSelection.OnSelected_Invoke(0,dirPointSelection.OnGUI);
         }
 
         private void OnToolSelection_MoveSurf()
         {
-            builder._Mode = GunBuilder.Mode.MoveSurf;
+            Builder._Mode = GunBuilder.Mode.MoveSurf;
             Tools.current = Tool.Custom;
 
             GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "PositionHandle");
@@ -59,11 +66,11 @@ namespace VehicleBuilder
 
         private void OnToolSelection_MoveDirectionPoints()
         {
-            builder._Mode = GunBuilder.Mode.SetDirectionPoints;
+            Builder._Mode = GunBuilder.Mode.SetDirectionPoints;
             Tools.current = Tool.Custom;
 
-            dirPointSelection.OnSelected(0, FirePointPositionHandle);
-            dirPointSelection.OnSelected(1, JoinPointPositionHandle);
+            dirPointSelection.OnSelected_Invoke(0, FirePointPositionHandle);
+            dirPointSelection.OnSelected_Invoke(1, JoinPointPositionHandle);
         }
 
         private void FirePointPositionHandle() 
@@ -73,11 +80,6 @@ namespace VehicleBuilder
         private void JoinPointPositionHandle()
         {
             GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "JoinPointHandle");
-        }
-
-        private void OnApplyButtonPressed()
-        {
-            AssetDatabase.Refresh();            
         }
     }
 

@@ -43,16 +43,6 @@ namespace VehicleBuilder
             Gizmos.DrawIcon(GunCenterPositionHandle, "join.png", false);
         }
 
-        private void OnDrawGizmos()
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-                UnityEditor.SceneView.RepaintAll();
-            }
-#endif
-        }
 
         private void UpdateGunPosition()
         {
@@ -78,13 +68,21 @@ namespace VehicleBuilder
         public Vector3 GunSurfPositionHandle
         {
             get { return _HeadBuilData.GunSurfPosition.GetAbsolutePosition(transform.position); }
-            set { _HeadBuilData.GunSurfPosition.SetRelativePosition(transform.position, value); }
+            set 
+            { 
+                _HeadBuilData.GunSurfPosition.SetRelativePosition(transform.position, value);
+                OnDataChanged();
+            }
         }
 
         public Vector3 GunCenterPositionHandle
         {
             get { return _HeadBuilData.GunCenterPosition.GetAbsolutePosition(transform.position); }
-            set { _HeadBuilData.GunCenterPosition.SetRelativePosition(transform.position, value); }
+            set 
+            {
+                _HeadBuilData.GunCenterPosition.SetRelativePosition(transform.position, value);
+                OnDataChanged();
+            }
         }
 
     }

@@ -35,16 +35,7 @@ namespace VehicleBuilder
             }
         }
 
-        void OnDrawGizmos()
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-                UnityEditor.SceneView.RepaintAll();
-            }
-#endif
-        }
+
 
         private GameObject InstantiatePart(GameObject partPrefab, string partName)
         {
