@@ -17,7 +17,6 @@ namespace VehicleBuilder
     public class GunBuilderEditor : BaseBuilderEditor
     {
         SelectionE toolSelection;
-        SelectionE dirPointSelection;
 
         private GunBuilder Builder { get { return base.builder as GunBuilder; } }
 
@@ -43,8 +42,8 @@ namespace VehicleBuilder
 
         protected virtual void OnSceneGUI()
         {
-            dirPointSelection.OnSelected_Invoke(0, FirePointPositionHandle);
-            dirPointSelection.OnSelected_Invoke(1, JoinPointPositionHandle);
+            toolSelection.OnSelected_Invoke(0, FirePointPositionHandle);
+            toolSelection.OnSelected_Invoke(1, JoinPointPositionHandle);
             EditorUtility.SetDirty(Builder.BuildData);
         }
 
