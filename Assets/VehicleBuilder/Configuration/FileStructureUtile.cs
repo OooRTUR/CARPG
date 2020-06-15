@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace VehicleBuilder
+namespace VehicleBuilder.Configuration
 {
     public class FileStructureUtile
     {
@@ -17,17 +17,17 @@ namespace VehicleBuilder
                 AssetDatabase.CreateFolder("Assets", "Prefabs");
 
             Type configtype = typeof(BuilderConfiguration);
-            IEnumerable<PropertyInfo> props = configtype.GetProperties().
+            IEnumerable<PropertyInfo> customFolderProps = configtype.GetProperties().
                 Where(prop => Attribute.IsDefined(prop, typeof(CustomFolderAttribute)));
 
-            foreach (PropertyInfo propInfo in props)
+            foreach (PropertyInfo customFolderPropInfo in customFolderProps)
             {
-                var customFolderName = (string)propInfo.GetValue(config);
+                var customFolderName = (string)customFolderPropInfo.GetValue(config);
                 var customFolderPath = $"{config.PrefabsFolderPath}\\{customFolderName}";
                 if (!AssetDatabase.IsValidFolder(customFolderPath))
                     AssetDatabase.CreateFolder(config.PrefabsFolderPath, customFolderName);
 
-                var customFolderAttribute = (CustomFolderAttribute)propInfo.GetCustomAttribute(typeof(CustomFolderAttribute));
+                var customFolderAttribute = (CustomFolderAttribute)customFolderPropInfo.GetCustomAttribute(typeof(CustomFolderAttribute));
                 if (customFolderAttribute.CreateModelsFolderRequired && !AssetDatabase.IsValidFolder(customFolderPath))
                     AssetDatabase.CreateFolder(customFolderPath, "Models");
             }

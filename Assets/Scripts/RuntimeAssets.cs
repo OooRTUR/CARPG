@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using BuilderConfiguration = VehicleBuilder.BuilderConfiguration;
+using BuilderConfiguration = VehicleBuilder.Configuration.BuilderConfiguration;
 
 public class RuntimeAssets : SingletonObject<RuntimeAssets>
 {

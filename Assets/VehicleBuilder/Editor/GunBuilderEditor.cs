@@ -25,17 +25,9 @@ namespace VehicleBuilder
         {
             base.OnEnable();
             toolSelection = new SelectionE(new string[]{
-                "Move Direction Points",
-                "Move Surf",
-                "Move Center",
-            });
-            dirPointSelection = new SelectionE(new string[]
-            {
                 "Fire Point",
                 "Join Point"
             });
-
- 
         }
 
         protected override void OnDisable()
@@ -43,42 +35,27 @@ namespace VehicleBuilder
             base.OnDisable();
         }
 
-        protected virtual void OnSceneGUI()
-        {
-            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveDirectionPoints);
-            toolSelection.OnSelected_Invoke(1, OnToolSelection_MoveSurf);
-            EditorUtility.SetDirty((builder as GunBuilder).BuildData);
-        }
-
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
-            toolSelection.OnSelected_Invoke(0,dirPointSelection.OnGUI);
+
         }
 
-        private void OnToolSelection_MoveSurf()
+        protected virtual void OnSceneGUI()
         {
-            Builder._Mode = GunBuilder.Mode.MoveSurf;
-            Tools.current = Tool.Custom;
-
-            GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "PositionHandle");
-        }
-
-        private void OnToolSelection_MoveDirectionPoints()
-        {
-            Builder._Mode = GunBuilder.Mode.SetDirectionPoints;
-            Tools.current = Tool.Custom;
-
             dirPointSelection.OnSelected_Invoke(0, FirePointPositionHandle);
             dirPointSelection.OnSelected_Invoke(1, JoinPointPositionHandle);
+            EditorUtility.SetDirty(Builder.BuildData);
         }
 
         private void FirePointPositionHandle() 
         {
+            Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "FirePointHandle");
         }
         private void JoinPointPositionHandle()
         {
+            Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(GunBuilder), "JoinPointHandle");
         }
     }

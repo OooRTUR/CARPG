@@ -18,24 +18,23 @@ namespace VehicleBuilder
         protected override void Awake()
         {
             base.Awake();
-            Parts.GetVehicleBuilder().PartChanged += HeadBuilder_GunChanged;
-            
         }
 
-        private void HeadBuilder_GunChanged(object sender, EventArgs e)
+        protected override void InitBaseBuildData()
         {
-            InitBuildData();
+            BuildData = (HeadBuildData)Context.GetSubAssetDirectly(Parts.GetGunBuilder().Context.GetPartTypeName(), typeof(HeadBuildData));
         }
 
-        private void InitBuildData()
+        
+
+        private void Update()
         {
-            BuildData = (HeadBuildData)Context.GetSubAsset(Parts.GetGunBuilder().Context.GetPartTypeName(), typeof(HeadBuildData));
+            UpdateGunPosition();
         }
 
-
-        private void Start()
+        private void UpdateGunPosition()
         {
-
+            Parts.GetGun().transform.position = GunSurfPositionHandle;
         }
 
         private void OnDrawGizmosSelected()
@@ -44,16 +43,7 @@ namespace VehicleBuilder
         }
 
 
-        private void UpdateGunPosition()
-        {
-            Parts.GetGun().transform.position = GunSurfPositionHandle;
-        }
-
-        private void Update()
-        {
-            UpdateGunPosition();
-        }
-
+        #region Transform handles
         public Vector3 PositionHandle
         {
             get { return _position; }
@@ -84,6 +74,7 @@ namespace VehicleBuilder
                 OnDataChanged();
             }
         }
+        #endregion
 
     }
 }

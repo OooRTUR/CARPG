@@ -30,14 +30,14 @@ namespace VehicleBuilder
             base.OnDisable();
         }
 
-        private void OnSceneGUI()
-        {
-            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveHead);
-        }
-
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
+        }
+
+        private void OnSceneGUI()
+        {
+            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveHead);
         }
 
         private void OnToolSelection_MoveHead()

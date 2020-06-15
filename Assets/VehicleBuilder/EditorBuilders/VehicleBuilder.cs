@@ -9,12 +9,15 @@ namespace VehicleBuilder
     [ExecuteInEditMode]
     public class VehicleBuilder : MonoBehaviour
     {
-        public BuilderParts Parts { get; private set; }
+        public event EventHandler PartChanged;
         private Dictionary<string, VehiclePartContext> contextStorage;
+        Queue<Action> tasks;
+        private BuilderParts parts;
 
         private void Awake()
         {
-            Parts = new BuilderParts(transform);
+            tasks = new Queue<Action>();
+            parts = new BuilderParts(transform);
             contextStorage = new Dictionary<string, VehiclePartContext>()
             {
                 {nameof(VehicleBuilder), null },
@@ -23,19 +26,22 @@ namespace VehicleBuilder
             };
         }
 
-        Queue<Action> Tasks = new Queue<Action>();
+
         private void Update()
         {
-            while (Tasks.Count > 0)
+            while (tasks.Count > 0)
             {
-                Action currentAction = Tasks.Dequeue();
+                Action currentAction = tasks.Dequeue();
                 currentAction.Invoke();
-                if (Tasks.Count == 0)
+                if (tasks.Count == 0)
                     PartChanged?.Invoke(this, new EventArgs());
             }
         }
 
-
+        public VehiclePartContext GetContext(string partHierarchyTypeName)
+        {
+            return contextStorage[partHierarchyTypeName];
+        }
 
         private GameObject InstantiatePart(GameObject partPrefab, string partName)
         {
@@ -44,23 +50,18 @@ namespace VehicleBuilder
             return newPart;
         }
 
-
-        public VehiclePartContext GetContext(string partHierarchyTypeName)
-        {
-            return contextStorage[partHierarchyTypeName];
-        }
-
+        #region Set Part Methods
         public void SetBody(VehiclePartContext partContext)
         {
-            Tasks.Enqueue(delegate
+            tasks.Enqueue(delegate
             {
                 contextStorage[nameof(BodyBuilder)] = partContext;
-                Transform existPart = Parts.GetBody();
+                Transform existPart = parts.GetBody();
                 if (existPart != null)
                 {
                     DestroyImmediate(existPart.gameObject);
                 }
-                var res =InstantiatePart((GameObject)partContext.GetPrefab(), "Body");
+                var res = InstantiatePart((GameObject)partContext.GetPrefabDirectly(), "Body");
                 res.AddComponent<BodyBuilder>();
             });
 
@@ -68,35 +69,36 @@ namespace VehicleBuilder
 
         public void SetHead(VehiclePartContext partContext)
         {
-            Tasks.Enqueue(delegate
+            tasks.Enqueue(delegate
             {
                 contextStorage[nameof(HeadBuilder)] = partContext;
-                Transform existPart = Parts.GetHead();
+                Transform existPart = parts.GetHead();
                 if (existPart != null)
                 {
                     DestroyImmediate(existPart.gameObject);
                 }
-                GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Head");
+                GameObject res = InstantiatePart((GameObject)partContext.GetPrefabDirectly(), "Head");
                 var headBuilder = res.AddComponent<HeadBuilder>();
             });
 
         }
-        public event EventHandler PartChanged;
 
         public void SetGun(VehiclePartContext partContext)
         {
-            Tasks.Enqueue(delegate
+            tasks.Enqueue(delegate
             {
                 contextStorage[nameof(GunBuilder)] = partContext;
-                Transform existPart = Parts.GetGun();
+                Transform existPart = parts.GetGun();
                 if (existPart != null)
                 {
                     DestroyImmediate(existPart.gameObject);
                 }
-                GameObject res = InstantiatePart((GameObject)partContext.GetPrefab(), "Gun");
+                GameObject res = InstantiatePart((GameObject)partContext.GetPrefabDirectly(), "Gun");
                 var gunBuilder = res.AddComponent<GunBuilder>();
             });
 
         }
+
+        #endregion
     }
 }

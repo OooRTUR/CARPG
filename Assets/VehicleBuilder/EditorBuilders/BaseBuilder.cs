@@ -15,11 +15,20 @@ namespace VehicleBuilder
         {
             Parts = new BuilderParts(transform.parent);
             Context = Parts.GetVehicleBuilder().GetContext(this.GetType().Name);
-            BuildData = (BaseBuildData)Context.GetAsset();
+            BuildData = (BaseBuildData)Context.GetAssetDirectly();
+            Parts.GetVehicleBuilder().PartChanged += delegate
+            {
+                InitBaseBuildData();
+            };
         }
         protected void OnDataChanged()
         {
             DataChanged?.Invoke(this, new EventArgs());
+        }
+
+        protected virtual void InitBaseBuildData()
+        {
+
         }
 
         void OnDrawGizmos()

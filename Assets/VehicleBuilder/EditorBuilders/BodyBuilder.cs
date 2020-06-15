@@ -11,25 +11,17 @@ namespace VehicleBuilder
         protected override void Awake()
         {
             base.Awake();
-            Parts.GetVehicleBuilder().PartChanged += BodyBuilder_PartChanged;
         }
+
+        protected override void InitBaseBuildData()
+        {
+            string partTypeName = Parts.GetHeadBuilder().Context.GetPartTypeName();
+            BuildData = (BodyBuildData)Context.GetSubAssetDirectly(partTypeName, typeof(BodyBuildData));
+        }
+
         private void Update()
         {
             UpdateHeadPosition();
-        }
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.DrawIcon(HeadPositionHandle, "join.png", false);
-        }
-        private void OnDrawGizmos()
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-                UnityEditor.SceneView.RepaintAll();
-            }
-#endif
         }
 
         private void UpdateHeadPosition()
@@ -37,15 +29,12 @@ namespace VehicleBuilder
             Parts.GetHead().transform.position = HeadPositionHandle;
         }
 
-        private void BodyBuilder_PartChanged(object sender, System.EventArgs e)
+        private void OnDrawGizmosSelected()
         {
-            InitBuildData();
-        }
-        private void InitBuildData()
-        {
-            BuildData = (BodyBuildData)Context.GetSubAsset(Parts.GetHeadBuilder().Context.GetPartTypeName(), typeof(BodyBuildData));
+            Gizmos.DrawIcon(HeadPositionHandle, "join.png", false);
         }
 
+        #region transform Handles
         public Vector3 HeadPositionHandle
         {
             get { return _BodyBuilData.HeadSurfPosition.GetAbsolutePosition(transform.position); }
@@ -56,6 +45,8 @@ namespace VehicleBuilder
             }
         }
 
- 
+        #endregion
+
+
     }
 }

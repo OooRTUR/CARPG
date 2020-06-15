@@ -18,7 +18,6 @@ namespace VehicleBuilder
             base.OnEnable();
             toolSelection = new SelectionE(new string[]
             {
-                "Move Head",
                 "Move Gun Center",
                 "Move Gun Surf"
             });
@@ -29,28 +28,18 @@ namespace VehicleBuilder
             base.OnDisable();
         }
 
-        protected virtual void OnSceneGUI()
-        {
-
-            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveHead);
-            toolSelection.OnSelected_Invoke(1, OnToolSelection_MoveGunCenter);
-            toolSelection.OnSelected_Invoke(2, OnToolSelection_MoveGunSurf);
-
-            
-        }
-
         public override void OnInspectorGUI()
         {
             toolSelection.OnGUI();
         }
 
-
-        #region gui actions
-        private void OnToolSelection_MoveHead()
+        protected virtual void OnSceneGUI()
         {
-            Tools.current = Tool.Custom;
-            GUIExtensions.PositionHandle(builder, typeof(HeadBuilder), "PositionHandle");
+            toolSelection.OnSelected_Invoke(0, OnToolSelection_MoveGunCenter);
+            toolSelection.OnSelected_Invoke(1, OnToolSelection_MoveGunSurf);
         }
+
+
         private void OnToolSelection_MoveGunCenter()
         {
             Tools.current = Tool.Custom;
@@ -61,11 +50,5 @@ namespace VehicleBuilder
             Tools.current = Tool.Custom;
             GUIExtensions.PositionHandle(builder, typeof(HeadBuilder), "GunSurfPositionHandle");
         }
-        #endregion
-
-
- 
-
-
     }
 }

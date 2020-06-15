@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO;
 using System.Reflection;
 using Extenstions.Editor;
+using VehicleBuilder.Configuration;
 
 namespace VehicleBuilder
 {

@@ -5,19 +5,25 @@ using System.IO;
 using System;
 using System.Linq;
 
+
+/// <summary>
+/// Class to send part asset data between editor and Builder Monobehaviour classes.
+/// Intended to avoid hard linking between VehicleBuilder classes
+/// </summary>
 public class VehiclePartContext
 {
     private string path;
 
-    private UnityEngine.Object asset;
-
     public VehiclePartContext(string path, Type assetType)
     {
         this.path = path;
-        asset = CreateAssetIfNotExist(path, assetType);
+        CreateAssetIfNotExist(path, assetType);
     }
 
-    private UnityEngine.Object CreateAssetIfNotExist(string path, Type assetType)
+    /// <summary>
+    /// create file with .asset extension to store addition part Build data
+    /// </summary>
+    private void CreateAssetIfNotExist(string path, Type assetType)
     {
         string assetPath = Path.ChangeExtension(this.path, "asset");
         UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath(assetPath, assetType);
@@ -26,10 +32,14 @@ public class VehiclePartContext
             asset = ScriptableObject.CreateInstance(assetType);
             AssetDatabase.CreateAsset(asset, assetPath);
         }
-        return asset;
     }
 
-    public UnityEngine.Object GetSubAsset(string subAssetName, Type subAssetType)
+    /// <summary>
+    /// Method supposed to work with complex assets.
+    /// Create subbasset if subbasset doesnt exist at GetAssetPath(). 
+    /// returns SubAsset at GetAssetPath().
+    /// </summary>
+    public UnityEngine.Object GetSubAssetDirectly(string subAssetName, Type subAssetType)
     {
         UnityEngine.Object res = null;
         var assetPath = GetAssetPath();
@@ -47,20 +57,29 @@ public class VehiclePartContext
             res = foundSubAssets[0];
         }
         return res;
-    }
-    
-    public GameObject GetPrefab()
+    }    
+
+    /// <summary>
+    /// Get link to source prefab
+    /// </summary>
+    public GameObject GetPrefabDirectly()
     {
         return (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
     }
-    public UnityEngine.Object GetAsset()
+
+    /// <summary>
+    /// Get link to source asset
+    /// </summary>
+    public UnityEngine.Object GetAssetDirectly()
     {
         return (UnityEngine.Object)AssetDatabase.LoadAssetAtPath(GetAssetPath(), typeof(UnityEngine.Object));
     }
+
     public string GetAssetPath()
     {
         return Path.ChangeExtension(path, "asset");
     }
+
     public string GetPartTypeName()
     {
         return Path.GetFileNameWithoutExtension(path);
