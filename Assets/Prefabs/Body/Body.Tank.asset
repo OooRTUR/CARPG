@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7008190998098581463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Name: Head.Solid
+  m_EditorClassIdentifier: 
+  headSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &-5400687535673888689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Name: Head.Turret
+  m_EditorClassIdentifier: 
+  headSurfPosition:
+    position: {x: 0, y: 0.9570751, z: 0.7443371}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,7 +42,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headSurfPosition:
     position: {x: 0, y: 0, z: 0}
---- !u!114 &343803547110221055
+--- !u!114 &3123179107195335506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24,21 +52,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Turret
+  m_Name: Head.Empty
   m_EditorClassIdentifier: 
   headSurfPosition:
-    position: {x: 0, y: 0.9004469, z: -0.7652265}
---- !u!114 &638953150557983696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Solid
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 0.77909756, z: -0.8429959}
+    position: {x: 0, y: 0, z: 0}

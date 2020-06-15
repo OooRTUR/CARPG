@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8ec4f36e346ddf41834fd75cae4a375, type: 3}
-  m_Name: hp
+  m_Script: {fileID: 11500000, guid: ca6c7b2175b34904897599934653cb07, type: 3}
+  m_Name: Gun.MachineGun
   m_EditorClassIdentifier: 
-  InitialValue: 50
+  joinPoint:
+    position: {x: 0.057528257, y: 0.22913074, z: -0.23979297}
+  firePoint:
+    position: {x: 0.06718153, y: 0.23242474, z: 0.92754114}

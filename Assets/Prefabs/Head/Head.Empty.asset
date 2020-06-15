@@ -1,54 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4897253564292106244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
-  m_Name: Gun.77mm
-  m_EditorClassIdentifier: 
-  gunSurfPosition:
-    position: {x: 0, y: 0, z: -0.9642352}
-  gunCenterPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &-486530213777699271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
-  m_Name: Gun.76mm
-  m_EditorClassIdentifier: 
-  gunSurfPosition:
-    position: {x: 0, y: 0, z: -1.4108909}
-  gunCenterPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
-  m_Name: Head.Turret
-  m_EditorClassIdentifier: 
-  gunSurfPosition:
-    position: {x: 0, y: 0, z: 0}
-  gunCenterPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &7696812893695794974
+--- !u!114 &-8095969945790207510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,6 +13,54 @@ MonoBehaviour:
   m_Name: Gun.32mm
   m_EditorClassIdentifier: 
   gunSurfPosition:
-    position: {x: 0, y: 0, z: -0.87292695}
+    position: {x: 0, y: 0, z: 0}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &-6986182017278523654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.Rack
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &-6378207187282851971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.MachineGun
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Head.Empty
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: 0, y: 0, z: 0}
   gunCenterPosition:
     position: {x: 0, y: 0, z: 0}

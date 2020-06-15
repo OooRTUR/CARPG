@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Gun.32mm
   m_EditorClassIdentifier: 
   joinPoint:
-    position: {x: 0, y: 0, z: 0.50296724}
+    position: {x: 0, y: 0, z: 0.49030244}
   firePoint:
-    position: {x: 0, y: 0, z: -0.45617902}
+    position: {x: 0, y: 0, z: -0.47986543}

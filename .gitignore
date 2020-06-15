@@ -72,3 +72,7 @@ crashlytics-build.properties
 
 # Current Project Files
 /Assets/Plugins/Zenject/
+/Assets/FreeMachineGun/
+/Assets/Mech/
+/Assets/MediumMechStriker/
+/Assets/car/
