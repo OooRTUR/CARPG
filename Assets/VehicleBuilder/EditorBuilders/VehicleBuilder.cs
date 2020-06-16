@@ -22,7 +22,7 @@ namespace VehicleBuilder
             {
                 {nameof(VehicleBuilder), null },
                 {nameof(HeadBuilder), null },
-                {nameof(BodyBuilder), null }
+                {nameof(BodyBuilder), null },
             };
         }
 

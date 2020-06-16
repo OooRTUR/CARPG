@@ -53,6 +53,12 @@
 [![](https://i.imgur.com/8Hku4xA.png) ]()
 
 
+** Добавление новых редактируемых частей **
+
+[![](https://i.imgur.com/XrPVC3K.png) ]()
+
+
+
 **Ссылки на оригинальные ассеты в AssetStore**
 
 https://assetstore.unity.com/packages/3d/props/guns/machine-guns-20611
