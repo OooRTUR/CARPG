@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6406507256346516817
+--- !u!114 &-7779339851450961475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,24 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Turret
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.MachineGun
   m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 1.5160203, z: 0}
---- !u!114 &-606401236070187454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Empty
-  m_EditorClassIdentifier: 
-  headSurfPosition:
+  gunSurfPosition:
+    position: {x: -0.104849815, y: -0.19746947, z: 0.7466887}
+  gunCenterPosition:
     position: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -37,36 +25,58 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Body.Mech
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 0, z: 0}
---- !u!114 &3205819049825723696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
-  m_Name: Head.Solid
-  m_EditorClassIdentifier: 
-  headSurfPosition:
-    position: {x: 0, y: 1.341537, z: 0}
---- !u!114 &5079312291631355391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccdf6fb72d6a9c44a3495c980aee240, type: 3}
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
   m_Name: Head.T90
   m_EditorClassIdentifier: 
-  headSurfPosition:
+  gunSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &718714208836641972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.Rack
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: -0.19869804, y: -0.24283409, z: 0.47445905}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &2659129189900846017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.32mm
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: 0, y: 0, z: 0}
+  gunCenterPosition:
+    position: {x: 0, y: 0, z: 0}
+--- !u!114 &5777919572003265570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40bad77fd57b830428bf1b0b4bf6998d, type: 3}
+  m_Name: Gun.T90Gun
+  m_EditorClassIdentifier: 
+  gunSurfPosition:
+    position: {x: 0, y: -0.6826196, z: 1.1913614}
+  gunCenterPosition:
     position: {x: 0, y: 0, z: 0}

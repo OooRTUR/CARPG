@@ -15,24 +15,24 @@ public class Vehicle : MonoBehaviour
     void Start()
     {
 
-        SetBody();
-        SetHead();
-        SetGun();
+        //SetBody();
+        //SetHead();
+        //SetGun();
         
     }
 
-    private void SetBody()
-    {
-        body = Instantiate(RuntimeAssets.Instance.bodyParts[0], transform);
-    }
-    private void SetHead()
-    {
-        head = Instantiate(RuntimeAssets.Instance.headParts[0], transform);
-    }
-    private void SetGun()
-    {
-        gun = Instantiate(RuntimeAssets.Instance.gunParts[0], transform);
-    }
+    //private void SetBody()
+    //{
+    //    body = Instantiate(RuntimeAssets.Instance.bodyParts[0], transform);
+    //}
+    //private void SetHead()
+    //{
+    //    head = Instantiate(RuntimeAssets.Instance.headParts[0], transform);
+    //}
+    //private void SetGun()
+    //{
+    //    gun = Instantiate(RuntimeAssets.Instance.gunParts[0], transform);
+    //}
 
     // Update is called once per frame
     void Update()

@@ -61,9 +61,6 @@ namespace VehicleBuilder.Configuration
          *      ->  Body
          *  BuilderConfiguration.asset
          */
-
-
-
     }
 
     public class CustomFolderAttribute : Attribute
