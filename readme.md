@@ -55,7 +55,9 @@
 
 ** Добавление новых редактируемых частей **
 
-[![](https://i.imgur.com/XrPVC3K.png) ]()
+Для реализации новых частей техники достаточно отнаследоваться от базовых классов BaseBuilderEditor, BaseBuilder и BaseBuildData, указать имя папки для новой части техники в BuilderConfiguration, создать вызывающие методы в VehicleBuilderEdiror и VehicleBuilder и добавить VehiclePartContext в contextStorage класса VehicleBuilder.
+
+[![](https://i.imgur.com/IWGmNAD.png) ]()
 
 
 
